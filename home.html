@@ -1,0 +1,381 @@
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font-sans);color:var(--color-text-primary);background:var(--color-background-primary)}
+
+/* ── HEADER ── */
+.header{background:#0A1628;padding:0 48px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.header-logo{display:flex;align-items:center;gap:9px;flex-shrink:0}
+.logo-caja{width:30px;height:30px;background:#1B6FBF;border-radius:5px;display:flex;align-items:center;justify-content:center}
+.logo-caja i{font-size:15px;color:#fff}
+.logo-nombre{font-size:15px;font-weight:500;color:#fff;letter-spacing:-0.2px}
+.header-menu{display:flex;gap:24px}
+.header-menu a{font-size:13px;color:rgba(255,255,255,0.6);text-decoration:none;cursor:pointer}
+.header-menu a:hover{color:#fff}
+.header-claim{font-size:12px;color:rgba(255,255,255,0.35);letter-spacing:0.3px;font-style:italic}
+.header-der{display:flex;align-items:center;gap:12px}
+.btn-idioma{background:transparent;border:0.5px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.5);padding:4px 10px;border-radius:4px;font-size:11px;cursor:pointer;font-family:var(--font-sans)}
+.btn-contacto{background:#1B6FBF;color:#fff;border:none;padding:7px 16px;border-radius:5px;font-size:12px;font-weight:500;cursor:pointer;font-family:var(--font-sans)}
+
+/* ── BLOQUE 1: subheader contacto ── */
+.subheader{background:#111E35;padding:7px 48px;display:flex;justify-content:flex-end}
+.subheader .btn-contacto{font-size:12px;padding:6px 16px}
+
+/* ── BLOQUE 2: BANNER DINÁMICO ── */
+.banner{background:#0A1628;min-height:420px;display:flex;align-items:center;padding:0 48px;position:relative;overflow:hidden}
+.banner-contenido{max-width:580px;position:relative;z-index:2}
+.banner-etiqueta{display:inline-block;border:0.5px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.5);padding:4px 12px;border-radius:20px;font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:18px}
+.banner h1{font-size:clamp(26px,3.5vw,42px);font-weight:500;color:#fff;line-height:1.15;letter-spacing:-0.4px;margin-bottom:14px}
+.banner p{font-size:15px;color:rgba(255,255,255,0.5);line-height:1.7;margin-bottom:28px;max-width:480px}
+.btn-banner{background:#1B6FBF;color:#fff;border:none;padding:11px 24px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font-sans)}
+.banner-puntos{position:absolute;bottom:24px;left:48px;display:flex;gap:7px;z-index:10}
+.punto{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.25);cursor:pointer;transition:all .3s}
+.punto.activo{background:#fff;width:20px;border-radius:4px}
+
+/* ── BLOQUE 3: CLIENTES ── */
+.clientes{padding:28px 48px;background:#F4F6F8;border-bottom:0.5px solid var(--color-border-tertiary)}
+.clientes-etiq{font-size:10px;color:var(--color-text-tertiary);letter-spacing:2px;text-transform:uppercase;text-align:center;margin-bottom:18px}
+.clientes-logos{display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
+.logo-cliente{font-size:11px;font-weight:500;color:var(--color-text-secondary);padding:6px 16px;border:0.5px solid var(--color-border-tertiary);border-radius:5px;background:var(--color-background-primary);letter-spacing:0.8px}
+
+/* ── BLOQUE 4: PRESENTACIÓN ── */
+.presentacion{padding:64px 48px;display:grid;grid-template-columns:1.1fr 1fr;gap:64px;align-items:center}
+.pres-izq h2{font-size:clamp(22px,2.8vw,32px);font-weight:500;line-height:1.2;letter-spacing:-0.3px;margin-bottom:14px}
+.pres-izq p{font-size:14px;color:var(--color-text-secondary);line-height:1.75;margin-bottom:28px;max-width:460px}
+.btn-link{background:none;border:none;color:#1B6FBF;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font-sans);padding:0;display:inline-flex;align-items:center;gap:5px}
+.btn-link i{font-size:14px}
+.cifras-mini{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cifra-m{background:#F4F6F8;border-radius:var(--border-radius-md);padding:20px 18px;text-align:center;border:0.5px solid var(--color-border-tertiary)}
+.cifra-m-num{font-size:28px;font-weight:500;color:#0A1628;letter-spacing:-0.5px;line-height:1}
+.cifra-m-num span{color:#1B6FBF}
+.cifra-m-label{font-size:11px;color:var(--color-text-secondary);margin-top:6px;line-height:1.4}
+
+/* ── BLOQUE 5: SOLUCIONES ── */
+.soluciones{padding:56px 48px;background:#F4F6F8}
+.bloque-etiq{font-size:10px;color:#1B6FBF;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px}
+.bloque-titulo{font-size:clamp(20px,2.5vw,28px);font-weight:500;letter-spacing:-0.2px;margin-bottom:36px}
+.sol-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.sol-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;transition:border-color .2s;cursor:pointer}
+.sol-card:hover{border-color:#1B6FBF}
+.sol-cab{background:#0A1628;padding:28px 24px}
+.sol-cab i{font-size:24px;color:#1B6FBF;margin-bottom:14px;display:block}
+.sol-cab h3{font-size:16px;font-weight:500;color:#fff;line-height:1.2;margin-bottom:8px}
+.sol-cab p{font-size:12px;color:rgba(255,255,255,0.45);line-height:1.6}
+.sol-cuerpo{padding:20px 24px}
+.sol-lista{list-style:none;display:flex;flex-direction:column;gap:7px;margin-bottom:18px}
+.sol-lista li{font-size:12px;color:var(--color-text-secondary);display:flex;gap:7px;align-items:flex-start}
+.sol-lista li::before{content:'';width:4px;height:4px;background:#1B6FBF;border-radius:50%;margin-top:7px;flex-shrink:0}
+.btn-sol{background:none;border:0.5px solid var(--color-border-secondary);color:var(--color-text-primary);padding:8px 16px;border-radius:5px;font-size:12px;font-weight:500;cursor:pointer;font-family:var(--font-sans);width:100%;transition:all .2s}
+.btn-sol:hover{background:#0A1628;color:#fff;border-color:#0A1628}
+
+/* ── BLOQUE 6: CERTIFICACIONES ── */
+.certs{padding:56px 48px}
+.certs-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:32px}
+.cert{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:22px 18px;text-align:center;background:var(--color-background-primary);transition:border-color .2s}
+.cert:hover{border-color:#1B6FBF}
+.cert-logo{width:40px;height:40px;background:#F4F6F8;border-radius:7px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:var(--color-text-secondary)}
+.cert h4{font-size:13px;font-weight:500;margin-bottom:4px}
+.cert p{font-size:11px;color:var(--color-text-secondary);line-height:1.4}
+
+/* ── BLOQUE 7: POR QUÉ PROSODIE ── */
+.porque{padding:56px 48px;background:#0A1628}
+.porque .bloque-titulo{color:#fff}
+.porque-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:32px}
+.porque-card{border:0.5px solid rgba(255,255,255,0.08);border-radius:var(--border-radius-lg);padding:28px 20px;transition:border-color .2s}
+.porque-card:hover{border-color:rgba(255,255,255,0.25)}
+.porque-card i{font-size:22px;color:#1B6FBF;margin-bottom:14px;display:block}
+.porque-card h4{font-size:14px;font-weight:500;color:#fff;margin-bottom:7px;line-height:1.3}
+.porque-card p{font-size:12px;color:rgba(255,255,255,0.4);line-height:1.6}
+
+/* ── CTA FINAL ── */
+.cta-final{padding:56px 48px;text-align:center;background:#F4F6F8;border-top:0.5px solid var(--color-border-tertiary)}
+.cta-final h2{font-size:28px;font-weight:500;letter-spacing:-0.3px;margin-bottom:10px}
+.cta-final p{font-size:14px;color:var(--color-text-secondary);margin-bottom:24px}
+.cta-botones{display:flex;gap:10px;justify-content:center}
+.btn-prim{background:#0A1628;color:#fff;border:none;padding:11px 24px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font-sans)}
+.btn-sec{background:transparent;color:#0A1628;border:0.5px solid var(--color-border-secondary);padding:11px 24px;border-radius:6px;font-size:13px;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;gap:7px}
+.btn-sec i{font-size:15px;color:#1B6FBF}
+
+/* ── FOOTER ── */
+footer{background:#070F1E;padding:40px 48px 22px}
+.footer-grid{display:grid;grid-template-columns:200px 1fr 1fr 1fr;gap:36px;margin-bottom:32px}
+.footer-marca p{font-size:12px;color:rgba(255,255,255,0.25);margin-top:10px;line-height:1.6}
+.footer-col h5{font-size:9px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.2);margin-bottom:12px}
+.footer-col a{display:block;font-size:12px;color:rgba(255,255,255,0.35);text-decoration:none;margin-bottom:6px;cursor:pointer}
+.footer-col a:hover{color:rgba(255,255,255,0.7)}
+.footer-base{border-top:0.5px solid rgba(255,255,255,0.06);padding-top:16px;display:flex;justify-content:space-between;align-items:center}
+.footer-base p{font-size:11px;color:rgba(255,255,255,0.18)}
+.footer-links{display:flex;gap:14px}
+.footer-links a{font-size:11px;color:rgba(255,255,255,0.18);text-decoration:none;cursor:pointer}
+
+/* ── CHATBOT ── */
+.chatbot-wrap{position:relative;height:64px}
+.chatbot-pos{position:absolute;bottom:14px;right:14px}
+.chatbot-burbuja{position:absolute;bottom:54px;right:0;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px;width:190px;display:none}
+.chatbot-burbuja.vis{display:block}
+.chatbot-burbuja p{font-size:13px;font-weight:500;margin-bottom:2px}
+.chatbot-burbuja span{font-size:11px;color:var(--color-text-secondary)}
+.chatbot-btn{width:44px;height:44px;background:#1B6FBF;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative}
+.chatbot-btn i{font-size:19px;color:#fff}
+.punto-verde{position:absolute;top:0;right:0;width:11px;height:11px;background:#22C55E;border-radius:50%;border:2px solid var(--color-background-primary)}
+</style>
+
+<h2 class="sr-only">Prosodie — Home corporativa. Bloque 1: header y menú. Bloque 2: banner dinámico. Bloque 3: clientes. Bloque 4: presentación y cifras. Bloque 5: soluciones. Bloque 6: certificaciones. Bloque 7: por qué Prosodie.</h2>
+
+<!-- BLOQUE 1: HEADER -->
+<header class="header">
+  <div class="header-logo">
+    <div class="logo-caja"><i class="ti ti-server" aria-hidden="true"></i></div>
+    <span class="logo-nombre">Prosodie</span>
+  </div>
+  <nav class="header-menu">
+    <a>Inicio</a>
+    <a>Servicios</a>
+    <a>Acerca de</a>
+    <a>Recursos</a>
+    <a>Trabaja con Nosotros</a>
+    <a>Contacto</a>
+  </nav>
+  <span class="header-claim">Tu partner tecnológico estratégico</span>
+  <div class="header-der">
+    <button class="btn-idioma">ES / EN</button>
+  </div>
+</header>
+
+<div class="subheader">
+  <button class="btn-contacto">Contacto</button>
+</div>
+
+<!-- BLOQUE 2: BANNER DINÁMICO -->
+<section class="banner" id="banner">
+  <div class="banner-contenido">
+    <span class="banner-etiqueta" id="b-etiq">Gestión de Infraestructuras Críticas</span>
+    <h1 id="b-h1">Infraestructuras críticas<br>siempre disponibles</h1>
+    <p id="b-p">Alta disponibilidad, resiliencia y continuidad de negocio para sistemas donde fallar no es una opción.</p>
+    <button class="btn-banner">Descubrir solución</button>
+  </div>
+  <div class="banner-puntos">
+    <div class="punto activo" onclick="irSlide(0)"></div>
+    <div class="punto" onclick="irSlide(1)"></div>
+    <div class="punto" onclick="irSlide(2)"></div>
+  </div>
+</section>
+
+<!-- BLOQUE 3: CLIENTES -->
+<section class="clientes">
+  <p class="clientes-etiq">Confían en nosotros</p>
+  <div class="clientes-logos">
+    <div class="logo-cliente">BANKINTER</div>
+    <div class="logo-cliente">MAPFRE</div>
+    <div class="logo-cliente">IBERDROLA</div>
+    <div class="logo-cliente">ADIF</div>
+    <div class="logo-cliente">GRUPO ACS</div>
+    <div class="logo-cliente">TELEFÓNICA</div>
+    <div class="logo-cliente">CAIXABANK</div>
+  </div>
+</section>
+
+<!-- BLOQUE 4: PRESENTACIÓN + CIFRAS -->
+<section class="presentacion">
+  <div class="pres-izq">
+    <h2>Tecnología con propósito,<br>experiencia con impacto</h2>
+    <p>Más de 25 años gestionando las infraestructuras más críticas de España y Europa. Somos el partner tecnológico que acompaña a organizaciones complejas en cada etapa de su evolución digital, con cercanía, rigor y compromiso real.</p>
+    <button class="btn-link">Conoce Prosodie <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+  </div>
+  <div class="cifras-mini">
+    <div class="cifra-m"><div class="cifra-m-num"><span>+25</span></div><div class="cifra-m-label">Años de experiencia</div></div>
+    <div class="cifra-m"><div class="cifra-m-num"><span>+200</span></div><div class="cifra-m-label">Profesionales</div></div>
+    <div class="cifra-m"><div class="cifra-m-num">2</div><div class="cifra-m-label">Oficinas en España</div></div>
+    <div class="cifra-m"><div class="cifra-m-num"><span>24/7</span></div><div class="cifra-m-label">Soporte continuo</div></div>
+  </div>
+</section>
+
+<!-- BLOQUE 5: SOLUCIONES -->
+<section class="soluciones">
+  <p class="bloque-etiq">Nuestras soluciones</p>
+  <h2 class="bloque-titulo">Capacidades al servicio de lo crítico</h2>
+  <div class="sol-grid">
+    <div class="sol-card">
+      <div class="sol-cab">
+        <i class="ti ti-server-2" aria-hidden="true"></i>
+        <h3>Gestión de Infraestructuras Críticas</h3>
+        <p>Alta disponibilidad, resiliencia y continuidad de negocio.</p>
+      </div>
+      <div class="sol-cuerpo">
+        <ul class="sol-lista">
+          <li>Resiliencia y alta disponibilidad</li>
+          <li>Seguridad integral y cumplimiento</li>
+          <li>Automatización y eficiencia</li>
+        </ul>
+        <button class="btn-sol">Ver solución</button>
+      </div>
+    </div>
+    <div class="sol-card">
+      <div class="sol-cab">
+        <i class="ti ti-cloud-computing" aria-hidden="true"></i>
+        <h3>Cloud Managed Services</h3>
+        <p>Gestión integral de entornos cloud híbridos y multicloud.</p>
+      </div>
+      <div class="sol-cuerpo">
+        <ul class="sol-lista">
+          <li>Arquitectura híbrida y multicloud</li>
+          <li>FinOps y optimización</li>
+          <li>Soberanía y gobernanza</li>
+        </ul>
+        <button class="btn-sol">Ver solución</button>
+      </div>
+    </div>
+    <div class="sol-card">
+      <div class="sol-cab">
+        <i class="ti ti-brain" aria-hidden="true"></i>
+        <h3>IA & Automation</h3>
+        <p>Automatización inteligente y AIOps con impacto real.</p>
+      </div>
+      <div class="sol-cuerpo">
+        <ul class="sol-lista">
+          <li>Automatización extremo a extremo</li>
+          <li>Inteligencia operativa AIOps</li>
+          <li>Gobernanza del dato</li>
+        </ul>
+        <button class="btn-sol">Ver solución</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOQUE 6: CERTIFICACIONES -->
+<section class="certs">
+  <p class="bloque-etiq">Certificaciones</p>
+  <h2 class="bloque-titulo">Excelencia certificada</h2>
+  <div class="certs-grid">
+    <div class="cert">
+      <div class="cert-logo">ISO</div>
+      <h4>ISO 27001</h4>
+      <p>Seguridad de la información</p>
+    </div>
+    <div class="cert">
+      <div class="cert-logo">ISO</div>
+      <h4>ISO 20000</h4>
+      <p>Gestión de servicios TI</p>
+    </div>
+    <div class="cert">
+      <div class="cert-logo">ENS</div>
+      <h4>ENS Nivel Alto</h4>
+      <p>Esquema Nacional de Seguridad</p>
+    </div>
+    <div class="cert">
+      <div class="cert-logo">AWS</div>
+      <h4>AWS Partner</h4>
+      <p>Advanced Consulting Partner</p>
+    </div>
+  </div>
+</section>
+
+<!-- BLOQUE 7: POR QUÉ PROSODIE -->
+<section class="porque">
+  <p class="bloque-etiq" style="color:rgba(255,255,255,0.35)">¿Por qué elegir a Prosodie?</p>
+  <h2 class="bloque-titulo">El partner que elige lo crítico</h2>
+  <div class="porque-grid">
+    <div class="porque-card">
+      <i class="ti ti-clock" aria-hidden="true"></i>
+      <h4>Más de 40 años de historia</h4>
+      <p>Décadas acompañando la transformación digital de las organizaciones más exigentes.</p>
+    </div>
+    <div class="porque-card">
+      <i class="ti ti-brain" aria-hidden="true"></i>
+      <h4>Innovación en la IA</h4>
+      <p>IA aplicada con impacto real y medible. Siempre con seguridad y trazabilidad.</p>
+    </div>
+    <div class="porque-card">
+      <i class="ti ti-flag" aria-hidden="true"></i>
+      <h4>Infraestructura soberana europea</h4>
+      <p>Datos y sistemas gestionados bajo normativa europea. GDPR, DORA y NIS2.</p>
+    </div>
+    <div class="porque-card">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <h4>Cercanía y proximidad</h4>
+      <p>Equipos dedicados y compromiso real. No somos un proveedor, somos parte de tu equipo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final">
+  <h2>¿Hablamos?</h2>
+  <p>Cuéntanos tu reto. Nuestro equipo te propondrá el camino más adecuado.</p>
+  <div class="cta-botones">
+    <button class="btn-prim">Contactar</button>
+    <button class="btn-sec"><i class="ti ti-brand-linkedin" aria-hidden="true"></i>LinkedIn</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-marca">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="logo-caja"><i class="ti ti-server" style="font-size:13px;color:#fff" aria-hidden="true"></i></div>
+        <span style="font-size:14px;font-weight:500;color:#fff">Prosodie</span>
+      </div>
+      <p>Partner tecnológico estratégico para infraestructuras críticas, cloud y transformación inteligente.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Servicios</h5>
+      <a>Infraestructuras Críticas</a>
+      <a>Cloud Managed Services</a>
+      <a>IA & Automation</a>
+    </div>
+    <div class="footer-col">
+      <h5>Empresa</h5>
+      <a>Quiénes Somos</a>
+      <a>Partners</a>
+      <a>Certificaciones</a>
+      <a>Trabaja con Nosotros</a>
+    </div>
+    <div class="footer-col">
+      <h5>Contacto</h5>
+      <a>+34 91 150 05 05</a>
+      <a>Valencia · Madrid</a>
+      <a>Formulario de contacto</a>
+      <a>LinkedIn</a>
+    </div>
+  </div>
+  <div class="footer-base">
+    <p>© 2025 Prosodie. Todos los derechos reservados.</p>
+    <div class="footer-links"><a>Privacidad</a><a>Aviso legal</a><a>Cookies</a></div>
+  </div>
+</footer>
+
+<!-- CHATBOT -->
+<div class="chatbot-wrap">
+  <div class="chatbot-pos">
+    <div class="chatbot-burbuja" id="cb"><p>¿Cómo podemos ayudarte?</p><span>Respondemos en minutos</span></div>
+    <button class="chatbot-btn" onclick="toggleChat()" aria-label="Abrir chat">
+      <i class="ti ti-message-circle" aria-hidden="true"></i>
+      <div class="punto-verde"></div>
+    </button>
+  </div>
+</div>
+
+<script>
+const slides=[
+  {etiq:'Gestión de Infraestructuras Críticas',h1:'Infraestructuras críticas<br>siempre disponibles',p:'Alta disponibilidad, resiliencia y continuidad de negocio para sistemas donde fallar no es una opción.'},
+  {etiq:'Cloud Managed Services',h1:'Cloud sin complejidad',p:'Gestión integral de entornos cloud híbridos y multicloud. Sin complejidad, con total control.'},
+  {etiq:'IA & Automation',h1:'IA aplicada a operaciones reales',p:'Automatización inteligente y AIOps con impacto real. IA segura, trazable y con resultados medibles.'}
+];
+let s=0;
+function irSlide(n){
+  s=n;
+  document.getElementById('b-etiq').textContent=slides[n].etiq;
+  document.getElementById('b-h1').innerHTML=slides[n].h1;
+  document.getElementById('b-p').textContent=slides[n].p;
+  document.querySelectorAll('.punto').forEach((p,i)=>p.classList.toggle('activo',i===n));
+}
+setInterval(()=>irSlide((s+1)%3),5000);
+
+let abierto=false;
+function toggleChat(){
+  abierto=!abierto;
+  document.getElementById('cb').classList.toggle('vis',abierto);
+}
+setTimeout(()=>{document.getElementById('cb').classList.add('vis');setTimeout(()=>document.getElementById('cb').classList.remove('vis'),4000)},1500);
+</script>
