@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prosodie – Homepage</title>
+  <style>
+    /* =============================================
+       VARIABLES Y RESET
+    ============================================= */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --color-primary:     #0A2540;   /* Azul corporativo oscuro */
+      --color-secondary:   #00A8E8;   /* Azul claro / cyan accent */
+      --color-accent:      #F26E22;   /* Naranja acento */
+      --color-light:       #F4F7FB;
+      --color-white:       #FFFFFF;
+      --color-text:        #1A1A2E;
+      --color-text-muted:  #5A6A80;
+      --color-border:      #D6E0EE;
+      --font-main: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      --radius-sm: 6px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --shadow-sm: 0 2px 8px rgba(10,37,64,0.08);
+      --shadow-md: 0 6px 24px rgba(10,37,64,0.13);
+      --transition: 0.25s ease;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-main);
+      color: var(--color-text);
+      background: var(--color-white);
+      line-height: 1.6;
+      font-size: 16px;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    img { display: block; max-width: 100%; }
+
+    /* =============================================
+       BLOQUE 1: HEADER / NAV
+    ============================================= */
+    .site-header {
+      background: var(--color-primary);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+    }
+
+    .nav-bar {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    /* Logo */
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-shrink: 0;
+    }
+
+    .nav-logo__mark {
+      width: 36px;
+      height: 36px;
+      background: var(--color-secondary);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-logo__mark span {
+      color: var(--color-primary);
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: -1px;
+    }
+
+    .nav-logo__text {
+      color: var(--color-white);
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    /* Menú principal */
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      flex: 1;
+    }
+
+    .nav-menu__item > a {
+      color: rgba(255,255,255,0.85);
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 0.5rem 0.85rem;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+      display: block;
+    }
+
+    .nav-menu__item > a:hover {
+      background: rgba(255,255,255,0.1);
+      color: var(--color-white);
+    }
+
+    /* Claim */
+    .nav-claim {
+      color: rgba(255,255,255,0.6);
+      font-size: 0.8rem;
+      font-style: italic;
+      white-space: nowrap;
+      /* NOTA: Claim pendiente de confirmar */
+    }
+
+    /* Botón idioma */
+    .btn-lang {
+      background: transparent;
+      border: 1.5px solid rgba(255,255,255,0.35);
+      color: var(--color-white);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 0.85rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+      letter-spacing: 0.5px;
+    }
+
+    .btn-lang:hover {
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.65);
+    }
+
+    /* Barra secundaria: botón de contacto */
+    .nav-bar-secondary {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0.5rem 2rem;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .btn-contact {
+      background: var(--color-accent);
+      color: var(--color-white);
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 0.55rem 1.4rem;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      letter-spacing: 0.3px;
+    }
+
+    .btn-contact:hover {
+      background: #d95c10;
+      transform: translateY(-1px);
+    }
+
+    /* =============================================
+       BLOQUE 2: HERO BANNER DINÁMICO
+    ============================================= */
+    .hero-banner {
+      background: var(--color-primary);
+      position: relative;
+      overflow: hidden;
+      min-height: 520px;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Decoración geométrica de fondo */
+    .hero-banner::before {
+      content: '';
+      position: absolute;
+      right: -100px;
+      top: -80px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(0,168,232,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-banner::after {
+      content: '';
+      position: absolute;
+      left: -60px;
+      bottom: -80px;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(242,110,34,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Slides del banner */
+    .hero-slides {
+      position: relative;
+      min-height: 380px;
+    }
+
+    .hero-slide {
+      display: none;
+      animation: fadeInSlide 0.6s ease;
+    }
+
+    .hero-slide.active {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    @keyframes fadeInSlide {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-slide__tag {
+      display: inline-block;
+      background: rgba(0,168,232,0.18);
+      color: var(--color-secondary);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 0.35rem 0.85rem;
+      border-radius: 100px;
+      margin-bottom: 1.25rem;
+      border: 1px solid rgba(0,168,232,0.3);
+    }
+
+    .hero-slide__title {
+      color: var(--color-white);
+      font-size: 2.5rem;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-slide__title em {
+      font-style: normal;
+      color: var(--color-secondary);
+    }
+
+    .hero-slide__desc {
+      color: rgba(255,255,255,0.72);
+      font-size: 1.05rem;
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+
+    .hero-slide__btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--color-secondary);
+      color: var(--color-primary);
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 0.75rem 1.75rem;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+    }
+
+    .hero-slide__btn:hover {
+      background: #0090cc;
+      transform: translateY(-2px);
+    }
+
+    .hero-slide__btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Visual lado derecho del slide */
+    .hero-slide__visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .hero-visual-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      text-align: center;
+      width: 280px;
+    }
+
+    .hero-visual-card__icon {
+      width: 72px;
+      height: 72px;
+      background: rgba(0,168,232,0.15);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.25rem;
+      border: 1px solid rgba(0,168,232,0.25);
+    }
+
+    .hero-visual-card__icon svg {
+      width: 36px;
+      height: 36px;
+      stroke: var(--color-secondary);
+      fill: none;
+      stroke-width: 1.5;
+    }
+
+    .hero-visual-card__label {
+      color: rgba(255,255,255,0.6);
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* Controles del slider */
+    .hero-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 2.5rem;
+    }
+
+    .hero-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      padding: 0;
+    }
+
+    .hero-dot.active {
+      background: var(--color-secondary);
+      width: 24px;
+      border-radius: 4px;
+    }
+
+    .hero-nav-btn {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: var(--color-white);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      margin-left: auto;
+    }
+
+    .hero-nav-btn:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    .hero-nav-btn svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    /* =============================================
+       BLOQUE 3: CLIENTES – "Confían en nosotros"
+    ============================================= */
+    .clients-strip {
+      background: var(--color-light);
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+      padding: 2.5rem 2rem;
+    }
+
+    .clients-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .clients-title {
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--color-text-muted);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 1.75rem;
+    }
+
+    .clients-logos {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    /* Placeholder logos — reemplazar con imágenes reales */
+    .client-logo-placeholder {
+      background: var(--color-border);
+      border-radius: var(--radius-sm);
+      width: 110px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text-muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* =============================================
+       BLOQUE 4: PRESENTACIÓN
+    ============================================= */
+    .presentation-section {
+      padding: 6rem 2rem;
+      background: var(--color-white);
+    }
+
+    .presentation-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      display: inline-block;
+      background: rgba(0,168,232,0.1);
+      color: var(--color-secondary);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 0.35rem 0.85rem;
+      border-radius: 100px;
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--color-primary);
+      line-height: 1.25;
+      margin-bottom: 1.25rem;
+    }
+
+    .presentation-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .presentation-desc {
+      color: var(--color-text-muted);
+      font-size: 1.05rem;
+      line-height: 1.75;
+      /* NOTA: Descripción pendiente de contenido */
+    }
+
+    .presentation-desc p {
+      margin-bottom: 1rem;
+    }
+
+    /* Cifras clave */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    .kpi-card {
+      background: var(--color-light);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--color-secondary);
+    }
+
+    .kpi-card__number {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--color-primary);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .kpi-card__number span {
+      color: var(--color-secondary);
+    }
+
+    .kpi-card__label {
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+      font-weight: 500;
+      /* NOTA: Labels de cifras clave pendientes */
+    }
+
+    /* =============================================
+       BLOQUE 5a: SOLUCIONES
+    ============================================= */
+    .solutions-section {
+      padding: 6rem 2rem;
+      background: var(--color-primary);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .solutions-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+
+    .solutions-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .solutions-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .solutions-header .section-label {
+      background: rgba(0,168,232,0.15);
+    }
+
+    .solutions-header .section-title {
+      color: var(--color-white);
+    }
+
+    .solutions-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .solution-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 2rem;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .solution-card:hover {
+      background: rgba(255,255,255,0.09);
+      border-color: rgba(0,168,232,0.4);
+      transform: translateY(-4px);
+    }
+
+    .solution-card__icon {
+      width: 56px;
+      height: 56px;
+      background: rgba(0,168,232,0.15);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(0,168,232,0.25);
+    }
+
+    .solution-card__icon svg {
+      width: 28px;
+      height: 28px;
+      stroke: var(--color-secondary);
+      fill: none;
+      stroke-width: 1.5;
+    }
+
+    .solution-card__title {
+      color: var(--color-white);
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.85rem;
+    }
+
+    .solution-card__desc {
+      color: rgba(255,255,255,0.6);
+      font-size: 0.9rem;
+      line-height: 1.65;
+      flex: 1;
+      margin-bottom: 1.75rem;
+      /* NOTA: Descripción de solución pendiente */
+    }
+
+    .solution-card__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--color-secondary);
+      font-size: 0.85rem;
+      font-weight: 700;
+      transition: var(--transition);
+      margin-top: auto;
+    }
+
+    .solution-card__link:hover {
+      gap: 0.7rem;
+    }
+
+    .solution-card__link svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.5;
+    }
+
+    /* =============================================
+       BLOQUE 5b: SERVICIOS
+    ============================================= */
+    .services-section {
+      padding: 6rem 2rem;
+      background: var(--color-light);
+    }
+
+    .services-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .services-header {
+      margin-bottom: 3.5rem;
+    }
+
+    .services-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    .service-block {
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .service-block:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-3px);
+    }
+
+    .service-block__top {
+      background: var(--color-primary);
+      padding: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .service-block__top-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(255,255,255,0.1);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .service-block__top-icon svg {
+      width: 24px;
+      height: 24px;
+      stroke: var(--color-secondary);
+      fill: none;
+      stroke-width: 1.5;
+    }
+
+    .service-block__top-title {
+      color: var(--color-white);
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .service-block__body {
+      padding: 1.75rem 2rem 2rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .service-block__desc {
+      color: var(--color-text-muted);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      flex: 1;
+      margin-bottom: 1.5rem;
+      /* NOTA: Descripción de servicio pendiente */
+    }
+
+    .service-block__btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--color-primary);
+      color: var(--color-white);
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 0.65rem 1.25rem;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+      align-self: flex-start;
+    }
+
+    .service-block__btn:hover {
+      background: var(--color-secondary);
+      color: var(--color-primary);
+    }
+
+    .service-block__btn svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.5;
+    }
+
+    /* =============================================
+       BLOQUE 6: CERTIFICACIONES
+    ============================================= */
+    .certs-section {
+      padding: 5rem 2rem;
+      background: var(--color-white);
+      border-top: 1px solid var(--color-border);
+    }
+
+    .certs-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .certs-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .certs-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      justify-content: center;
+    }
+
+    .cert-item {
+      background: var(--color-light);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 1.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.85rem;
+      min-width: 160px;
+      transition: var(--transition);
+    }
+
+    .cert-item:hover {
+      border-color: var(--color-secondary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Placeholder logo certificación */
+    .cert-item__logo {
+      width: 60px;
+      height: 60px;
+      background: var(--color-border);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text-muted);
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-align: center;
+      /* NOTA: Reemplazar con logo real de cada certificación */
+    }
+
+    .cert-item__title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      text-align: center;
+      /* NOTA: Nombre de certificación pendiente */
+    }
+
+    /* =============================================
+       BLOQUE 7: ¿POR QUÉ ELEGIR A PROSODIE?
+    ============================================= */
+    .why-section {
+      padding: 6rem 2rem;
+      background: var(--color-light);
+    }
+
+    .why-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .why-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .why-header .section-title {
+      font-size: 2rem;
+    }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+    }
+
+    .why-card {
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .why-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--color-secondary);
+      transform: scaleX(0);
+      transition: var(--transition);
+    }
+
+    .why-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-4px);
+    }
+
+    .why-card:hover::after {
+      transform: scaleX(1);
+    }
+
+    .why-card__icon {
+      width: 64px;
+      height: 64px;
+      background: rgba(0,168,232,0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.25rem;
+    }
+
+    .why-card__icon svg {
+      width: 30px;
+      height: 30px;
+      stroke: var(--color-secondary);
+      fill: none;
+      stroke-width: 1.5;
+    }
+
+    .why-card__title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--color-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .why-card__subtitle {
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .why-card__desc {
+      font-size: 0.82rem;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+
+    /* =============================================
+       FOOTER MÍNIMO (estructura)
+    ============================================= */
+    .site-footer {
+      background: var(--color-primary);
+      padding: 2.5rem 2rem;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .footer-brand {
+      color: rgba(255,255,255,0.5);
+      font-size: 0.82rem;
+    }
+
+    .footer-brand strong {
+      color: var(--color-white);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-links a {
+      color: rgba(255,255,255,0.5);
+      font-size: 0.82rem;
+      transition: var(--transition);
+    }
+
+    .footer-links a:hover {
+      color: var(--color-secondary);
+    }
+
+    /* =============================================
+       RESPONSIVE
+    ============================================= */
+    @media (max-width: 992px) {
+      .hero-slide.active {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .hero-slide__visual { display: none; }
+      .presentation-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .solutions-grid { grid-template-columns: 1fr; }
+      .services-list { grid-template-columns: 1fr; }
+      .why-grid { grid-template-columns: repeat(2, 1fr); }
+
+      .nav-claim { display: none; }
+    }
+
+    @media (max-width: 640px) {
+      .nav-menu { display: none; }
+      .hero-slide__title { font-size: 1.8rem; }
+      .kpi-grid { grid-template-columns: 1fr; }
+      .why-grid { grid-template-columns: 1fr; }
+      .footer-inner { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =============================================
+       BLOQUE 1: HEADER / NAVBAR
+  ============================================= -->
+  <header class="site-header">
+    <nav class="nav-bar" aria-label="Navegación principal">
+
+      <!-- Logo -->
+      <a href="/" class="nav-logo" aria-label="Prosodie – Inicio">
+        <div class="nav-logo__mark"><span>P</span></div>
+        <span class="nav-logo__text">Prosodie</span>
+      </a>
+
+      <!-- Menú principal -->
+      <!-- NOTA: Ítems del menú pendientes de confirmar -->
+      <ul class="nav-menu" role="list">
+        <li class="nav-menu__item"><a href="#">Soluciones</a></li>
+        <li class="nav-menu__item"><a href="#">Servicios</a></li>
+        <li class="nav-menu__item"><a href="#">Empresa</a></li>
+        <li class="nav-menu__item"><a href="#">Clientes</a></li>
+        <li class="nav-menu__item"><a href="#">Blog</a></li>
+      </ul>
+
+      <!-- Claim -->
+      <!-- NOTA: Claim corporativo pendiente de confirmar -->
+      <span class="nav-claim"><!-- Claim corporativo --></span>
+
+      <!-- Botón cambio de idioma -->
+      <button class="btn-lang" aria-label="Cambiar idioma">FR / ES</button>
+
+    </nav>
+
+    <!-- Barra secundaria: botón de contacto -->
+    <div class="nav-bar-secondary">
+      <a href="#contacto" class="btn-contact">Contacto</a>
+    </div>
+  </header>
+
+
+  <!-- =============================================
+       BLOQUE 2: HERO BANNER DINÁMICO
+       Banner dinámico presentando los 3 servicios clave
+  ============================================= -->
+  <section class="hero-banner" aria-label="Servicios principales">
+    <div class="hero-inner">
+      <div class="hero-slides" id="heroSlides">
+
+        <!-- Slide 1: Gestión de Infraestructuras Críticas -->
+        <div class="hero-slide active" id="slide-1" role="group" aria-label="Servicio 1 de 3">
+          <div class="hero-slide__content">
+            <span class="hero-slide__tag">Servicio 01</span>
+            <h1 class="hero-slide__title">
+              Gestión de<br><em>Infraestructuras Críticas</em>
+            </h1>
+            <p class="hero-slide__desc">
+              <!-- NOTA: Descripción del servicio pendiente de contenido -->
+            </p>
+            <a href="#" class="hero-slide__btn">
+              Descubrir el servicio
+              <svg viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" fill="none">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+              </svg>
+            </a>
+          </div>
+          <div class="hero-slide__visual">
+            <div class="hero-visual-card">
+              <div class="hero-visual-card__icon">
+                <!-- Icono Infraestructuras -->
+                <svg viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v18M19 3v18M3 9h4M17 9h4M3 15h4M17 15h4M9 3h6v18H9z"/>
+                </svg>
+              </div>
+              <p class="hero-visual-card__label">Infraestructuras Críticas</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 2: IA & Automation -->
+        <div class="hero-slide" id="slide-2" role="group" aria-label="Servicio 2 de 3">
+          <div class="hero-slide__content">
+            <span class="hero-slide__tag">Servicio 02</span>
+            <h1 class="hero-slide__title">
+              <em>IA &amp; Automation</em>
+            </h1>
+            <p class="hero-slide__desc">
+              <!-- NOTA: Descripción del servicio pendiente de contenido -->
+            </p>
+            <a href="#" class="hero-slide__btn">
+              Descubrir el servicio
+              <svg viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" fill="none">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+              </svg>
+            </a>
+          </div>
+          <div class="hero-slide__visual">
+            <div class="hero-visual-card">
+              <div class="hero-visual-card__icon">
+                <!-- Icono IA -->
+                <svg viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.75a6.75 6.75 0 110 13.5 6.75 6.75 0 010-13.5zM21.75 21l-4.5-4.5M15 9a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+              </div>
+              <p class="hero-visual-card__label">IA &amp; Automation</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 3: Cloud Managed Services -->
+        <div class="hero-slide" id="slide-3" role="group" aria-label="Servicio 3 de 3">
+          <div class="hero-slide__content">
+            <span class="hero-slide__tag">Servicio 03</span>
+            <h1 class="hero-slide__title">
+              Cloud<br><em>Managed Services</em>
+            </h1>
+            <p class="hero-slide__desc">
+              <!-- NOTA: Descripción del servicio pendiente de contenido -->
+            </p>
+            <a href="#" class="hero-slide__btn">
+              Descubrir el servicio
+              <svg viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" fill="none">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+              </svg>
+            </a>
+          </div>
+          <div class="hero-slide__visual">
+            <div class="hero-visual-card">
+              <div class="hero-visual-card__icon">
+                <!-- Icono Cloud -->
+                <svg viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15a4.5 4.5 0 004.5 4.5H18a3.75 3.75 0 001.332-7.257 3 3 0 00-3.758-3.848 5.25 5.25 0 00-10.233 2.33A4.502 4.502 0 002.25 15z"/>
+                </svg>
+              </div>
+              <p class="hero-visual-card__label">Cloud Managed Services</p>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /hero-slides -->
+
+      <!-- Controles del slider -->
+      <div class="hero-controls" aria-label="Navegación del banner">
+        <button class="hero-dot active" data-slide="0" aria-label="Slide 1"></button>
+        <button class="hero-dot" data-slide="1" aria-label="Slide 2"></button>
+        <button class="hero-dot" data-slide="2" aria-label="Slide 3"></button>
+        <button class="hero-nav-btn" id="heroPrev" aria-label="Anterior">
+          <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+        </button>
+        <button class="hero-nav-btn" id="heroNext" aria-label="Siguiente">
+          <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =============================================
+       BLOQUE 3: CLIENTES – "Confían en nosotros"
+  ============================================= -->
+  <section class="clients-strip" aria-label="Clientes de Prosodie">
+    <div class="clients-inner">
+      <p class="clients-title">Confían en nosotros</p>
+      <!-- NOTA: Logos de clientes pendientes de proporcionar -->
+      <div class="clients-logos">
+        <div class="client-logo-placeholder">Logo cliente</div>
+        <div class="client-logo-placeholder">Logo cliente</div>
+        <div class="client-logo-placeholder">Logo cliente</div>
+        <div class="client-logo-placeholder">Logo cliente</div>
+        <div class="client-logo-placeholder">Logo cliente</div>
+        <div class="client-logo-placeholder">Logo cliente</div>
+        <div class="client-logo-placeholder">Logo cliente</div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =============================================
+       BLOQUE 4: PRESENTACIÓN
+       Título, Descripción y Cifras clave
+  ============================================= -->
+  <section class="presentation-section" aria-labelledby="presentation-title">
+    <div class="presentation-inner">
+      <div class="presentation-grid">
+
+        <!-- Texto: Título + Descripción -->
+        <div>
+          <span class="section-label">Quiénes somos</span>
+          <!-- NOTA: Título de la sección pendiente de contenido -->
+          <h2 class="section-title" id="presentation-title"><!-- Título pendiente --></h2>
+          <div class="presentation-desc">
+            <!-- NOTA: Descripción de la empresa pendiente de contenido -->
+            <p></p>
+          </div>
+        </div>
+
+        <!-- Cifras clave -->
+        <div>
+          <span class="section-label">Cifras clave</span>
+          <div class="kpi-grid">
+            <!-- NOTA: Cifras clave y sus labels pendientes de contenido -->
+            <div class="kpi-card">
+              <div class="kpi-card__number"><!-- Cifra --></div>
+              <div class="kpi-card__label"><!-- Label --></div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-card__number"><!-- Cifra --></div>
+              <div class="kpi-card__label"><!-- Label --></div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-card__number"><!-- Cifra --></div>
+              <div class="kpi-card__label"><!-- Label --></div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-card__number"><!-- Cifra --></div>
+              <div class="kpi-card__label"><!-- Label --></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =============================================
+       BLOQUE 5a: SOLUCIONES
+       3 cajas con las 3 soluciones + botón a páginas
+  ============================================= -->
+  <section class="solutions-section" aria-labelledby="solutions-title">
+    <div class="solutions-inner">
+      <div class="solutions-header">
+        <span class="section-label">Nuestras soluciones</span>
+        <!-- NOTA: Título de sección soluciones pendiente -->
+        <h2 class="section-title" id="solutions-title"><!-- Título pendiente --></h2>
+      </div>
+
+      <div class="solutions-grid">
+
+        <!-- Solución 1 -->
+        <article class="solution-card">
+          <div class="solution-card__icon">
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v18M19 3v18M3 9h4M17 9h4M3 15h4M17 15h4M9 3h6v18H9z"/></svg>
+          </div>
+          <!-- NOTA: Título, descripción y URL de solución 1 pendientes -->
+          <h3 class="solution-card__title">Gestión de Infraestructuras Críticas</h3>
+          <p class="solution-card__desc"><!-- Descripción pendiente --></p>
+          <a href="#" class="solution-card__link">
+            Ver solución
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          </a>
+        </article>
+
+        <!-- Solución 2 -->
+        <article class="solution-card">
+          <div class="solution-card__icon">
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.75a6.75 6.75 0 110 13.5 6.75 6.75 0 010-13.5zM21.75 21l-4.5-4.5"/></svg>
+          </div>
+          <!-- NOTA: Título, descripción y URL de solución 2 pendientes -->
+          <h3 class="solution-card__title">IA &amp; Automation</h3>
+          <p class="solution-card__desc"><!-- Descripción pendiente --></p>
+          <a href="#" class="solution-card__link">
+            Ver solución
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          </a>
+        </article>
+
+        <!-- Solución 3 -->
+        <article class="solution-card">
+          <div class="solution-card__icon">
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15a4.5 4.5 0 004.5 4.5H18a3.75 3.75 0 001.332-7.257 3 3 0 00-3.758-3.848 5.25 5.25 0 00-10.233 2.33A4.502 4.502 0 002.25 15z"/></svg>
+          </div>
+          <!-- NOTA: Título, descripción y URL de solución 3 pendientes -->
+          <h3 class="solution-card__title">Cloud Managed Services</h3>
+          <p class="solution-card__desc"><!-- Descripción pendiente --></p>
+          <a href="#" class="solution-card__link">
+            Ver solución
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          </a>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =============================================
+       BLOQUE 5b: SERVICIOS
+       3 bloques con los servicios + botón a páginas
+  ============================================= -->
+  <section class="services-section" aria-labelledby="services-title">
+    <div class="services-inner">
+      <div class="services-header">
+        <span class="section-label">Nuestros servicios</span>
+        <!-- NOTA: Título de sección servicios pendiente -->
+        <h2 class="section-title" id="services-title"><!-- Título pendiente --></h2>
+      </div>
+
+      <div class="services-list">
+
+        <!-- Servicio 1: Gestión de Infraestructuras Críticas -->
+        <article class="service-block">
+          <div class="service-block__top">
+            <div class="service-block__top-icon">
+              <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v18M19 3v18M3 9h4M17 9h4M3 15h4M17 15h4M9 3h6v18H9z"/></svg>
+            </div>
+            <h3 class="service-block__top-title">Gestión de Infraestructuras Críticas</h3>
+          </div>
+          <div class="service-block__body">
+            <!-- NOTA: Descripción del servicio 1 pendiente -->
+            <p class="service-block__desc"></p>
+            <!-- NOTA: URL de la página del servicio 1 pendiente -->
+            <a href="#" class="service-block__btn">
+              Más información
+              <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+          </div>
+        </article>
+
+        <!-- Servicio 2: IA & Automation -->
+        <article class="service-block">
+          <div class="service-block__top">
+            <div class="service-block__top-icon">
+              <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2v-4M9 21H5a2 2 0 01-2-2v-4m0 0h18"/></svg>
+            </div>
+            <h3 class="service-block__top-title">IA &amp; Automation</h3>
+          </div>
+          <div class="service-block__body">
+            <!-- NOTA: Descripción del servicio 2 pendiente -->
+            <p class="service-block__desc"></p>
+            <!-- NOTA: URL de la página del servicio 2 pendiente -->
+            <a href="#" class="service-block__btn">
+              Más información
+              <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+          </div>
+        </article>
+
+        <!-- Servicio 3: Cloud Managed Services -->
+        <article class="service-block">
+          <div class="service-block__top">
+            <div class="service-block__top-icon">
+              <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15a4.5 4.5 0 004.5 4.5H18a3.75 3.75 0 001.332-7.257 3 3 0 00-3.758-3.848 5.25 5.25 0 00-10.233 2.33A4.502 4.502 0 002.25 15z"/></svg>
+            </div>
+            <h3 class="service-block__top-title">Cloud Managed Services</h3>
+          </div>
+          <div class="service-block__body">
+            <!-- NOTA: Descripción del servicio 3 pendiente -->
+            <p class="service-block__desc"></p>
+            <!-- NOTA: URL de la página del servicio 3 pendiente -->
+            <a href="#" class="service-block__btn">
+              Más información
+              <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =============================================
+       BLOQUE 6: CERTIFICACIONES
+       Varios bloques: título + logo de cada certificación
+  ============================================= -->
+  <section class="certs-section" aria-labelledby="certs-title">
+    <div class="certs-inner">
+      <div class="certs-header">
+        <span class="section-label">Certificaciones</span>
+        <!-- NOTA: Título de sección certificaciones pendiente -->
+        <h2 class="section-title" id="certs-title"><!-- Título pendiente --></h2>
+      </div>
+
+      <!-- NOTA: Lista de certificaciones (nombre + logo) pendiente de proporcionar -->
+      <div class="certs-grid">
+        <div class="cert-item">
+          <div class="cert-item__logo">Logo</div>
+          <p class="cert-item__title"><!-- Nombre certificación --></p>
+        </div>
+        <div class="cert-item">
+          <div class="cert-item__logo">Logo</div>
+          <p class="cert-item__title"><!-- Nombre certificación --></p>
+        </div>
+        <div class="cert-item">
+          <div class="cert-item__logo">Logo</div>
+          <p class="cert-item__title"><!-- Nombre certificación --></p>
+        </div>
+        <div class="cert-item">
+          <div class="cert-item__logo">Logo</div>
+          <p class="cert-item__title"><!-- Nombre certificación --></p>
+        </div>
+        <div class="cert-item">
+          <div class="cert-item__logo">Logo</div>
+          <p class="cert-item__title"><!-- Nombre certificación --></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =============================================
+       BLOQUE 7: ¿POR QUÉ ELEGIR A PROSODIE?
+       4 datos clave en bloques destacados
+  ============================================= -->
+  <section class="why-section" aria-labelledby="why-title">
+    <div class="why-inner">
+      <div class="why-header">
+        <span class="section-label">Nuestros valores</span>
+        <h2 class="section-title" id="why-title">¿Por qué elegir a Prosodie?</h2>
+      </div>
+
+      <div class="why-grid">
+
+        <!-- Dato 1: Más de 40 años de historia -->
+        <div class="why-card">
+          <div class="why-card__icon">
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <div class="why-card__title">+40</div>
+          <div class="why-card__subtitle">años de historia</div>
+          <p class="why-card__desc">Más de 40 años de historia</p>
+        </div>
+
+        <!-- Dato 2: Innovación en la IA -->
+        <div class="why-card">
+          <div class="why-card__icon">
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+          </div>
+          <div class="why-card__title">IA</div>
+          <div class="why-card__subtitle">Innovación</div>
+          <p class="why-card__desc">Innovación en la IA</p>
+        </div>
+
+        <!-- Dato 3: Infraestructura soberana / europea -->
+        <div class="why-card">
+          <div class="why-card__icon">
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <div class="why-card__title">🇪🇺</div>
+          <div class="why-card__subtitle">Infraestructura soberana</div>
+          <p class="why-card__desc">Infraestructura soberana / europea</p>
+        </div>
+
+        <!-- Dato 4: Cercanía / proximidad -->
+        <div class="why-card">
+          <div class="why-card__icon">
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          </div>
+          <div class="why-card__title">🤝</div>
+          <div class="why-card__subtitle">Proximidad</div>
+          <p class="why-card__desc">Cercanía / proximidad</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =============================================
+       FOOTER MÍNIMO
+       NOTA: Contenido completo del footer pendiente
+  ============================================= -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <strong>Prosodie</strong> &copy; 2025 – Todos los derechos reservados
+      </div>
+      <nav class="footer-links" aria-label="Links secundarios">
+        <!-- NOTA: Links de footer pendientes -->
+        <a href="#">Aviso legal</a>
+        <a href="#">Política de privacidad</a>
+        <a href="#">LinkedIn</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+    </div>
+  </footer>
+
+
+  <!-- =============================================
+       JAVASCRIPT: Slider hero banner
+  ============================================= -->
+  <script>
+    (function () {
+      var slides = document.querySelectorAll('.hero-slide');
+      var dots   = document.querySelectorAll('.hero-dot');
+      var current = 0;
+      var total   = slides.length;
+      var autoTimer;
+
+      function goTo(index) {
+        slides[current].classList.remove('active');
+        dots[current].classList.remove('active');
+        current = (index + total) % total;
+        slides[current].classList.add('active');
+        dots[current].classList.add('active');
+      }
+
+      function next() { goTo(current + 1); }
+      function prev() { goTo(current - 1); }
+
+      function startAuto() {
+        autoTimer = setInterval(next, 5000);
+      }
+
+      function stopAuto() {
+        clearInterval(autoTimer);
+      }
+
+      document.getElementById('heroNext').addEventListener('click', function () {
+        stopAuto(); next(); startAuto();
+      });
+      document.getElementById('heroPrev').addEventListener('click', function () {
+        stopAuto(); prev(); startAuto();
+      });
+
+      dots.forEach(function (dot, i) {
+        dot.addEventListener('click', function () {
+          stopAuto(); goTo(i); startAuto();
+        });
+      });
+
+      startAuto();
+    })();
+  </script>
+
+</body>
+</html>
