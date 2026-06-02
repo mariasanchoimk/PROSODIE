@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eventos – Prosodie</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-primary:    #0A2540;
+      --color-secondary:  #00A8E8;
+      --color-accent:     #F26E22;
+      --color-light:      #F4F7FB;
+      --color-white:      #FFFFFF;
+      --color-text:       #1A1A2E;
+      --color-text-muted: #5A6A80;
+      --color-border:     #D6E0EE;
+      --font-main: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      --radius-sm: 6px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --shadow-sm: 0 2px 8px rgba(10,37,64,0.08);
+      --shadow-md: 0 6px 24px rgba(10,37,64,0.13);
+      --shadow-dropdown: 0 12px 40px rgba(10,37,64,0.18);
+      --transition: 0.25s ease;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-main); color: var(--color-text); background: var(--color-white); line-height: 1.6; font-size: 16px; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+
+    /* =============================================
+       HEADER
+    ============================================= */
+    .site-header { background: var(--color-primary); position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 12px rgba(0,0,0,0.2); }
+    .nav-bar { max-width: 1200px; margin: 0 auto; padding: 0 2rem; height: 70px; display: flex; align-items: center; gap: 1.5rem; }
+    .nav-logo { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; }
+    .nav-logo__mark { width: 36px; height: 36px; background: var(--color-secondary); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; }
+    .nav-logo__mark span { color: var(--color-primary); font-weight: 800; font-size: 18px; }
+    .nav-logo__text { color: var(--color-white); font-size: 1.25rem; font-weight: 700; letter-spacing: 0.5px; }
+    .nav-menu { display: flex; align-items: center; gap: 0; flex: 1; }
+    .nav-menu__item { position: relative; }
+    .nav-menu__item > a, .nav-menu__item > button { color: rgba(255,255,255,0.85); font-size: 0.875rem; font-weight: 500; padding: 0.55rem 0.9rem; border-radius: var(--radius-sm); transition: var(--transition); display: flex; align-items: center; gap: 0.3rem; background: none; border: none; cursor: pointer; white-space: nowrap; font-family: var(--font-main); line-height: 1; }
+    .nav-menu__item > a:hover, .nav-menu__item > button:hover { background: rgba(255,255,255,0.1); color: var(--color-white); }
+    .nav-menu__item.active > a, .nav-menu__item.active > button { color: var(--color-secondary); }
+    .nav-arrow { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2.5; transition: transform var(--transition); flex-shrink: 0; }
+    .nav-menu__item.has-dropdown:hover .nav-arrow { transform: rotate(180deg); }
+    .nav-dropdown { position: absolute; top: calc(100% + 8px); left: 0; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-md); box-shadow: var(--shadow-dropdown); min-width: 240px; padding: 0.5rem; opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity var(--transition), transform var(--transition), visibility var(--transition); z-index: 300; }
+    .nav-menu__item.has-dropdown:hover .nav-dropdown, .nav-menu__item.has-dropdown:focus-within .nav-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+    .nav-dropdown__item a { display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 0.85rem; border-radius: var(--radius-sm); color: var(--color-text); font-size: 0.875rem; font-weight: 500; transition: var(--transition); }
+    .nav-dropdown__item a:hover { background: var(--color-light); color: var(--color-primary); }
+    .nav-dropdown__item.active a { background: rgba(0,168,232,0.08); color: var(--color-secondary); }
+    .nav-dropdown__icon { width: 32px; height: 32px; background: rgba(0,168,232,0.1); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .nav-dropdown__icon svg { width: 16px; height: 16px; stroke: var(--color-secondary); fill: none; stroke-width: 1.75; }
+    .nav-dropdown__label { line-height: 1.2; }
+    .nav-dropdown__sub { display: block; font-size: 0.75rem; color: var(--color-text-muted); font-weight: 400; margin-top: 1px; }
+    .nav-end { display: flex; align-items: center; gap: 0.75rem; margin-left: auto; flex-shrink: 0; }
+    .nav-claim { color: rgba(255,255,255,0.5); font-size: 0.78rem; font-style: italic; white-space: nowrap; }
+    .btn-lang { background: transparent; border: 1.5px solid rgba(255,255,255,0.3); color: var(--color-white); font-size: 0.78rem; font-weight: 600; padding: 0.3rem 0.75rem; border-radius: var(--radius-sm); cursor: pointer; transition: var(--transition); }
+    .btn-lang:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.6); }
+    .btn-contact-nav { background: var(--color-accent); color: var(--color-white); font-size: 0.82rem; font-weight: 700; padding: 0.5rem 1.2rem; border-radius: var(--radius-sm); border: none; cursor: pointer; transition: var(--transition); white-space: nowrap; }
+    .btn-contact-nav:hover { background: #d95c10; transform: translateY(-1px); }
+
+    /* =============================================
+       BLOQUE 1: HERO / PRESENTACIÓN
+    ============================================= */
+    .page-hero {
+      background: var(--color-primary);
+      padding: 5rem 2rem 4.5rem;
+      position: relative; overflow: hidden;
+      text-align: center;
+    }
+    .page-hero::before { content: ''; position: absolute; left: 50%; top: -120px; transform: translateX(-50%); width: 700px; height: 700px; background: radial-gradient(circle, rgba(0,168,232,0.12) 0%, transparent 65%); pointer-events: none; }
+    .page-hero__inner { max-width: 760px; margin: 0 auto; position: relative; z-index: 1; }
+
+    .breadcrumb { display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 1.75rem; }
+    .breadcrumb a { color: rgba(255,255,255,0.45); font-size: 0.8rem; transition: var(--transition); }
+    .breadcrumb a:hover { color: var(--color-secondary); }
+    .breadcrumb__sep { color: rgba(255,255,255,0.25); font-size: 0.75rem; }
+    .breadcrumb__current { color: rgba(255,255,255,0.7); font-size: 0.8rem; }
+
+    .page-hero__tag { display: inline-block; background: rgba(0,168,232,0.18); color: var(--color-secondary); font-size: 0.72rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 0.3rem 0.8rem; border-radius: 100px; margin-bottom: 1.25rem; border: 1px solid rgba(0,168,232,0.3); }
+    .page-hero__title { color: var(--color-white); font-size: 2.8rem; font-weight: 800; line-height: 1.12; margin-bottom: 1.25rem; }
+    .page-hero__title em { font-style: normal; color: var(--color-secondary); }
+    .page-hero__desc { color: rgba(255,255,255,0.68); font-size: 1.05rem; line-height: 1.8; margin-bottom: 2.25rem; }
+
+    /* Pills de navegación interna */
+    .page-hero__anchors { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+    .anchor-pill {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: rgba(255,255,255,0.85);
+      font-size: 0.85rem; font-weight: 600;
+      padding: 0.55rem 1.2rem; border-radius: 100px;
+      transition: var(--transition);
+    }
+    .anchor-pill:hover { background: rgba(0,168,232,0.2); border-color: rgba(0,168,232,0.4); color: var(--color-white); }
+    .anchor-pill svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    /* =============================================
+       UTILIDADES
+    ============================================= */
+    .section-label { display: inline-block; background: rgba(0,168,232,0.1); color: var(--color-secondary); font-size: 0.72rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 0.3rem 0.8rem; border-radius: 100px; margin-bottom: 1rem; }
+    .section-title { font-size: 1.85rem; font-weight: 800; color: var(--color-primary); line-height: 1.25; margin-bottom: 0.5rem; }
+    .section-subtitle { color: var(--color-text-muted); font-size: 1rem; }
+
+    /* =============================================
+       BLOQUE 2a: PRÓXIMOS EVENTOS
+    ============================================= */
+    .upcoming-section { padding: 5.5rem 2rem; background: var(--color-white); }
+    .upcoming-inner { max-width: 1200px; margin: 0 auto; }
+    .events-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; margin-bottom: 3rem; flex-wrap: wrap; }
+    .events-header__text { }
+
+    /* Grid próximos: tarjeta grande + 2 pequeñas */
+    .upcoming-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 1.5rem;
+    }
+
+    /* Tarjeta evento FEATURED (ocupa 2 filas) */
+    .event-card {
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: var(--transition);
+      display: flex; flex-direction: column;
+    }
+    .event-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+    .event-card--featured { grid-row: span 2; }
+
+    /* Imagen / placeholder del evento */
+    .event-card__img {
+      width: 100%;
+      position: relative;
+      background: var(--color-primary);
+      overflow: hidden;
+    }
+    .event-card--featured .event-card__img { aspect-ratio: 4/3; }
+    .event-card:not(.event-card--featured) .event-card__img { aspect-ratio: 16/7; }
+
+    /* Fondo decorativo del placeholder */
+    .event-card__img-bg {
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        rgba(255,255,255,0.02) 0px,
+        rgba(255,255,255,0.02) 1px,
+        transparent 1px,
+        transparent 14px
+      );
+    }
+
+    /* Logo/icono placeholder del evento */
+    .event-card__img-placeholder {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.75rem;
+    }
+    .event-card__img-icon {
+      width: 64px; height: 64px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .event-card__img-icon svg { width: 30px; height: 30px; stroke: rgba(255,255,255,0.5); fill: none; stroke-width: 1.5; }
+    .event-card__img-label { color: rgba(255,255,255,0.4); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.5px; }
+
+    /* Badge "PRÓXIMO" / "PASADO" */
+    .event-card__badge {
+      position: absolute; top: 14px; left: 14px;
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+      padding: 0.25rem 0.65rem; border-radius: var(--radius-sm);
+    }
+    .event-card__badge--upcoming { background: var(--color-accent); color: var(--color-white); }
+    .event-card__badge--past { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.7); }
+
+    /* Cuerpo */
+    .event-card__body { padding: 1.5rem 1.75rem 1.75rem; flex: 1; display: flex; flex-direction: column; }
+
+    .event-card__meta {
+      display: flex; align-items: center; gap: 1.25rem;
+      margin-bottom: 0.85rem; flex-wrap: wrap;
+    }
+    .event-card__meta-item {
+      display: flex; align-items: center; gap: 0.4rem;
+      font-size: 0.8rem; color: var(--color-text-muted); font-weight: 500;
+    }
+    .event-card__meta-item svg { width: 14px; height: 14px; stroke: var(--color-secondary); fill: none; stroke-width: 2; flex-shrink: 0; }
+
+    .event-card__title { font-size: 1.05rem; font-weight: 700; color: var(--color-primary); line-height: 1.35; margin-bottom: 0.65rem; }
+    .event-card--featured .event-card__title { font-size: 1.25rem; }
+
+    .event-card__desc { font-size: 0.875rem; color: var(--color-text-muted); line-height: 1.7; flex: 1; margin-bottom: 1.25rem; }
+
+    .event-card__link {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      color: var(--color-secondary); font-size: 0.85rem; font-weight: 700;
+      transition: var(--transition); margin-top: auto; align-self: flex-start;
+    }
+    .event-card__link:hover { gap: 0.7rem; }
+    .event-card__link svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2.5; }
+
+    /* =============================================
+       BLOQUE 2b: EVENTOS PASADOS
+    ============================================= */
+    .past-section { padding: 5.5rem 2rem; background: var(--color-light); }
+    .past-inner { max-width: 1200px; margin: 0 auto; }
+
+    .past-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+
+    /* Tarjeta pasada: más compacta, imagen en escala de grises */
+    .event-card--past { opacity: 0.92; }
+    .event-card--past .event-card__img { filter: grayscale(40%); }
+    .event-card--past:hover { opacity: 1; }
+    .event-card--past:hover .event-card__img { filter: grayscale(0%); }
+
+    /* =============================================
+       CTA
+    ============================================= */
+    .cta-section { padding: 5rem 2rem; background: var(--color-primary); text-align: center; }
+    .cta-inner { max-width: 640px; margin: 0 auto; }
+    .cta-section h2 { font-size: 1.9rem; font-weight: 800; color: var(--color-white); margin-bottom: 1rem; }
+    .cta-section p { color: rgba(255,255,255,0.65); font-size: 1rem; margin-bottom: 2rem; }
+    .cta-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-cta-primary { background: var(--color-accent); color: var(--color-white); font-size: 0.9rem; font-weight: 700; padding: 0.85rem 2rem; border-radius: var(--radius-sm); transition: var(--transition); }
+    .btn-cta-primary:hover { background: #d95c10; transform: translateY(-2px); }
+    .btn-cta-secondary { background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.25); color: var(--color-white); font-size: 0.9rem; font-weight: 700; padding: 0.85rem 2rem; border-radius: var(--radius-sm); transition: var(--transition); }
+    .btn-cta-secondary:hover { background: rgba(255,255,255,0.18); }
+
+    /* FOOTER */
+    .site-footer { background: var(--color-primary); padding: 3.5rem 2rem 1.5rem; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; }
+    .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 3rem; padding-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 1.5rem; }
+    .footer-brand__logo { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; }
+    .footer-brand__logo-mark { width: 32px; height: 32px; background: var(--color-secondary); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; }
+    .footer-brand__logo-mark span { color: var(--color-primary); font-weight: 800; font-size: 16px; }
+    .footer-brand__logo-text { color: var(--color-white); font-size: 1.1rem; font-weight: 700; }
+    .footer-brand__desc { color: rgba(255,255,255,0.5); font-size: 0.85rem; line-height: 1.7; }
+    .footer-col__title { color: var(--color-white); font-size: 0.8rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 1.2rem; }
+    .footer-col ul { display: flex; flex-direction: column; gap: 0.6rem; }
+    .footer-col ul li a { color: rgba(255,255,255,0.5); font-size: 0.875rem; transition: var(--transition); }
+    .footer-col ul li a:hover { color: var(--color-secondary); }
+    .footer-contact p { color: rgba(255,255,255,0.5); font-size: 0.875rem; margin-bottom: 0.5rem; }
+    .footer-contact strong { color: rgba(255,255,255,0.8); }
+    .footer-bottom { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .footer-copy { color: rgba(255,255,255,0.35); font-size: 0.8rem; }
+    .footer-legal { display: flex; gap: 1.25rem; }
+    .footer-legal a { color: rgba(255,255,255,0.35); font-size: 0.8rem; transition: var(--transition); }
+    .footer-legal a:hover { color: var(--color-secondary); }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) { .past-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 900px) {
+      .upcoming-grid { grid-template-columns: 1fr; }
+      .event-card--featured { grid-row: span 1; }
+      .nav-claim { display: none; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    }
+    @media (max-width: 768px) {
+      .nav-menu { display: none; }
+      .page-hero__title { font-size: 2rem; }
+      .past-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .events-header { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 480px) { .footer-bottom { flex-direction: column; text-align: center; } }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <nav class="nav-bar" aria-label="Navegación principal">
+      <a href="index.html" class="nav-logo" aria-label="Prosodie – Inicio">
+        <div class="nav-logo__mark"><span>P</span></div>
+        <span class="nav-logo__text">Prosodie</span>
+      </a>
+      <ul class="nav-menu" role="list">
+        <li class="nav-menu__item"><a href="index.html">Inicio</a></li>
+        <li class="nav-menu__item has-dropdown">
+          <button aria-haspopup="true" aria-expanded="false">Soluciones<svg class="nav-arrow" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></button>
+          <ul class="nav-dropdown" role="menu">
+            <li class="nav-dropdown__item" role="none"><a href="infraestructuras.html" role="menuitem"><div class="nav-dropdown__icon"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v18M19 3v18M3 9h4M17 9h4M3 15h4M17 15h4M9 3h6v18H9z"/></svg></div><span class="nav-dropdown__label">Gestión de Infraestructuras Críticas<span class="nav-dropdown__sub">Alta disponibilidad y resiliencia</span></span></a></li>
+            <li class="nav-dropdown__item" role="none"><a href="cloud.html" role="menuitem"><div class="nav-dropdown__icon"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15a4.5 4.5 0 004.5 4.5H18a3.75 3.75 0 001.332-7.257 3 3 0 00-3.758-3.848 5.25 5.25 0 00-10.233 2.33A4.502 4.502 0 002.25 15z"/></svg></div><span class="nav-dropdown__label">Cloud Managed Services<span class="nav-dropdown__sub">Gestión integral cloud</span></span></a></li>
+            <li class="nav-dropdown__item" role="none"><a href="ia-automation.html" role="menuitem"><div class="nav-dropdown__icon"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></div><span class="nav-dropdown__label">IA &amp; Automation<span class="nav-dropdown__sub">Automatización inteligente</span></span></a></li>
+          </ul>
+        </li>
+        <li class="nav-menu__item has-dropdown active">
+          <button aria-haspopup="true" aria-expanded="false">Recursos<svg class="nav-arrow" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></button>
+          <ul class="nav-dropdown" role="menu">
+            <li class="nav-dropdown__item" role="none"><a href="voces.html" role="menuitem"><div class="nav-dropdown__icon"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z"/></svg></div><span class="nav-dropdown__label">Voces de Prosodie</span></a></li>
+            <li class="nav-dropdown__item" role="none"><a href="#" role="menuitem"><div class="nav-dropdown__icon"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25z"/></svg></div><span class="nav-dropdown__label">Casos de Uso</span></a></li>
+            <li class="nav-dropdown__item active" role="none"><a href="eventos.html" role="menuitem"><div class="nav-dropdown__icon"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg></div><span class="nav-dropdown__label">Eventos</span></a></li>
+          </ul>
+        </li>
+        <li class="nav-menu__item has-dropdown">
+          <button aria-haspopup="true" aria-expanded="false">Acerca de<svg class="nav-arrow" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></button>
+          <ul class="nav-dropdown" role="menu">
+            <li class="nav-dropdown__item" role="none"><a href="#" role="menuitem"><div class="nav-dropdown__icon"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div><span class="nav-dropdown__label">Quiénes somos</span></a></li>
+            <li class="nav-dropdown__item" role="none"><a href="#" role="menuitem"><div class="nav-dropdown__icon"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z"/></svg></div><span class="nav-dropdown__label">Partners</span></a></li>
+            <li class="nav-dropdown__item" role="none"><a href="#" role="menuitem"><div class="nav-dropdown__icon"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"/></svg></div><span class="nav-dropdown__label">Certificaciones</span></a></li>
+          </ul>
+        </li>
+        <li class="nav-menu__item"><a href="#">Trabaja con Nosotros</a></li>
+      </ul>
+      <div class="nav-end">
+        <span class="nav-claim">Tu partner tecnológico estratégico</span>
+        <button class="btn-lang" aria-label="Cambiar idioma">ES / EN</button>
+        <a href="#contacto" class="btn-contact-nav">Contacto</a>
+      </div>
+    </nav>
+  </header>
+
+
+  <!-- =============================================
+       BLOQUE 1: PRESENTACIÓN
+       NOTA: Título y descripción pendientes de confirmar por el cliente
+  ============================================= -->
+  <section class="page-hero" aria-labelledby="page-title">
+    <div class="page-hero__inner">
+      <nav class="breadcrumb" aria-label="Ruta de navegación">
+        <a href="index.html">Inicio</a>
+        <span class="breadcrumb__sep">›</span>
+        <a href="#">Recursos</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__current">Eventos</span>
+      </nav>
+      <span class="page-hero__tag">Recursos</span>
+      <!-- NOTA: Título pendiente de confirmar por el cliente -->
+      <h1 class="page-hero__title" id="page-title">Prosodie en el<br><em>sector tecnológico</em></h1>
+      <!-- NOTA: Descripción pendiente de confirmar por el cliente -->
+      <p class="page-hero__desc">Estar presentes en los principales foros del sector es parte de nuestro compromiso con la industria. Compartimos conocimiento, debatimos tendencias y construimos relaciones con los actores más relevantes de la tecnología y la infraestructura crítica en España y Europa.</p>
+      <div class="page-hero__anchors">
+        <a href="#proximos" class="anchor-pill">
+          <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          Próximos eventos
+        </a>
+        <a href="#pasados" class="anchor-pill">
+          <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          Eventos pasados
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =============================================
+       BLOQUE 2a: PRÓXIMOS EVENTOS
+       NOTA: Datos de eventos (nombre, fecha, lugar, descripción, enlace) pendientes
+  ============================================= -->
+  <section class="upcoming-section" id="proximos" aria-labelledby="upcoming-title">
+    <div class="upcoming-inner">
+
+      <div class="events-header">
+        <div class="events-header__text">
+          <span class="section-label">Agenda</span>
+          <h2 class="section-title" id="upcoming-title">Próximos eventos</h2>
+          <p class="section-subtitle">Encuéntranos en estos foros y conferencias del sector.</p>
+        </div>
+      </div>
+
+      <div class="upcoming-grid">
+
+        <!-- EVENTO PRÓXIMO DESTACADO -->
+        <!-- NOTA: Foto/logo, fecha, lugar, título, descripción y enlace pendientes -->
+        <article class="event-card event-card--featured">
+          <div class="event-card__img">
+            <div class="event-card__img-bg"></div>
+            <span class="event-card__badge event-card__badge--upcoming">Próximo</span>
+            <div class="event-card__img-placeholder">
+              <div class="event-card__img-icon">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+              </div>
+              <span class="event-card__img-label">Foto / logo del evento</span>
+            </div>
+          </div>
+          <div class="event-card__body">
+            <div class="event-card__meta">
+              <span class="event-card__meta-item">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+                DD Mes AAAA
+              </span>
+              <span class="event-card__meta-item">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
+                Ciudad, País
+              </span>
+            </div>
+            <h3 class="event-card__title">Nombre del evento pendiente de contenido real</h3>
+            <p class="event-card__desc">Descripción del evento pendiente de contenido real por parte del cliente. Aquí se indicará el tipo de evento, temáticas y el papel de Prosodie como participante, ponente o patrocinador.</p>
+            <a href="#" class="event-card__link">
+              Más información
+              <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+          </div>
+        </article>
+
+        <!-- EVENTO PRÓXIMO 2 -->
+        <!-- NOTA: Datos pendientes -->
+        <article class="event-card">
+          <div class="event-card__img">
+            <div class="event-card__img-bg"></div>
+            <span class="event-card__badge event-card__badge--upcoming">Próximo</span>
+            <div class="event-card__img-placeholder">
+              <div class="event-card__img-icon">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+              </div>
+              <span class="event-card__img-label">Foto / logo del evento</span>
+            </div>
+          </div>
+          <div class="event-card__body">
+            <div class="event-card__meta">
+              <span class="event-card__meta-item">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+                DD Mes AAAA
+              </span>
+              <span class="event-card__meta-item">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
+                Ciudad, País
+              </span>
+            </div>
+            <h3 class="event-card__title">Nombre del evento pendiente de contenido real</h3>
+            <p class="event-card__desc">Descripción del evento pendiente de contenido real por parte del cliente.</p>
+            <a href="#" class="event-card__link">
+              Más información
+              <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+          </div>
+        </article>
+
+        <!-- EVENTO PRÓXIMO 3 -->
+        <!-- NOTA: Datos pendientes -->
+        <article class="event-card">
+          <div class="event-card__img">
+            <div class="event-card__img-bg"></div>
+            <span class="event-card__badge event-card__badge--upcoming">Próximo</span>
+            <div class="event-card__img-placeholder">
+              <div class="event-card__img-icon">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+              </div>
+              <span class="event-card__img-label">Foto / logo del evento</span>
+            </div>
+          </div>
+          <div class="event-card__body">
+            <div class="event-card__meta">
+              <span class="event-card__meta-item">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+                DD Mes AAAA
+              </span>
+              <span class="event-card__meta-item">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
+                Ciudad, País
+              </span>
+            </div>
+            <h3 class="event-card__title">Nombre del evento pendiente de contenido real</h3>
+            <p class="event-card__desc">Descripción del evento pendiente de contenido real por parte del cliente.</p>
+            <a href="#" class="event-card__link">
+              Más información
+              <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =============================================
+       BLOQUE 2b: EVENTOS PASADOS
+       NOTA: Datos de eventos (nombre, fecha, lugar, descripción) pendientes
+  ============================================= -->
+  <section class="past-section" id="pasados" aria-labelledby="past-title">
+    <div class="past-inner">
+
+      <div class="events-header">
+        <div class="events-header__text">
+          <span class="section-label">Historial</span>
+          <h2 class="section-title" id="past-title">Eventos pasados</h2>
+          <p class="section-subtitle">Nuestra trayectoria de participación en el sector.</p>
+        </div>
+      </div>
+
+      <div class="past-grid">
+
+        <!-- EVENTO PASADO 1 -->
+        <!-- NOTA: Datos pendientes -->
+        <article class="event-card event-card--past">
+          <div class="event-card__img" style="aspect-ratio:16/9">
+            <div class="event-card__img-bg"></div>
+            <span class="event-card__badge event-card__badge--past">Pasado</span>
+            <div class="event-card__img-placeholder">
+              <div class="event-card__img-icon">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+              </div>
+              <span class="event-card__img-label">Foto / logo del evento</span>
+            </div>
+          </div>
+          <div class="event-card__body">
+            <div class="event-card__meta">
+              <span class="event-card__meta-item">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+                DD Mes AAAA
+              </span>
+              <span class="event-card__meta-item">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
+                Ciudad, País
+              </span>
+            </div>
+            <h3 class="event-card__title">Nombre del evento pendiente de contenido real</h3>
+            <p class="event-card__desc">Descripción del evento pendiente de contenido real por parte del cliente.</p>
+          </div>
+        </article>
+
+        <!-- EVENTO PASADO 2 -->
+        <article class="event-card event-card--past">
+          <div class="event-card__img" style="aspect-ratio:16/9">
+            <div class="event-card__img-bg"></div>
+            <span class="event-card__badge event-card__badge--past">Pasado</span>
+            <div class="event-card__img-placeholder">
+              <div class="event-card__img-icon">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+              </div>
+              <span class="event-card__img-label">Foto / logo del evento</span>
+            </div>
+          </div>
+          <div class="event-card__body">
+            <div class="event-card__meta">
+              <span class="event-card__meta-item">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+                DD Mes AAAA
+              </span>
+              <span class="event-card__meta-item">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
+                Ciudad, País
+              </span>
+            </div>
+            <h3 class="event-card__title">Nombre del evento pendiente de contenido real</h3>
+            <p class="event-card__desc">Descripción del evento pendiente de contenido real por parte del cliente.</p>
+          </div>
+        </article>
+
+        <!-- EVENTO PASADO 3 -->
+        <article class="event-card event-card--past">
+          <div class="event-card__img" style="aspect-ratio:16/9">
+            <div class="event-card__img-bg"></div>
+            <span class="event-card__badge event-card__badge--past">Pasado</span>
+            <div class="event-card__img-placeholder">
+              <div class="event-card__img-icon">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+              </div>
+              <span class="event-card__img-label">Foto / logo del evento</span>
+            </div>
+          </div>
+          <div class="event-card__body">
+            <div class="event-card__meta">
+              <span class="event-card__meta-item">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+                DD Mes AAAA
+              </span>
+              <span class="event-card__meta-item">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
+                Ciudad, País
+              </span>
+            </div>
+            <h3 class="event-card__title">Nombre del evento pendiente de contenido real</h3>
+            <p class="event-card__desc">Descripción del evento pendiente de contenido real por parte del cliente.</p>
+          </div>
+        </article>
+
+        <!-- EVENTO PASADO 4 -->
+        <article class="event-card event-card--past">
+          <div class="event-card__img" style="aspect-ratio:16/9">
+            <div class="event-card__img-bg"></div>
+            <span class="event-card__badge event-card__badge--past">Pasado</span>
+            <div class="event-card__img-placeholder">
+              <div class="event-card__img-icon">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+              </div>
+              <span class="event-card__img-label">Foto / logo del evento</span>
+            </div>
+          </div>
+          <div class="event-card__body">
+            <div class="event-card__meta">
+              <span class="event-card__meta-item">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+                DD Mes AAAA
+              </span>
+              <span class="event-card__meta-item">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
+                Ciudad, País
+              </span>
+            </div>
+            <h3 class="event-card__title">Nombre del evento pendiente de contenido real</h3>
+            <p class="event-card__desc">Descripción del evento pendiente de contenido real por parte del cliente.</p>
+          </div>
+        </article>
+
+        <!-- EVENTO PASADO 5 -->
+        <article class="event-card event-card--past">
+          <div class="event-card__img" style="aspect-ratio:16/9">
+            <div class="event-card__img-bg"></div>
+            <span class="event-card__badge event-card__badge--past">Pasado</span>
+            <div class="event-card__img-placeholder">
+              <div class="event-card__img-icon">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+              </div>
+              <span class="event-card__img-label">Foto / logo del evento</span>
+            </div>
+          </div>
+          <div class="event-card__body">
+            <div class="event-card__meta">
+              <span class="event-card__meta-item">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+                DD Mes AAAA
+              </span>
+              <span class="event-card__meta-item">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
+                Ciudad, País
+              </span>
+            </div>
+            <h3 class="event-card__title">Nombre del evento pendiente de contenido real</h3>
+            <p class="event-card__desc">Descripción del evento pendiente de contenido real por parte del cliente.</p>
+          </div>
+        </article>
+
+        <!-- EVENTO PASADO 6 -->
+        <article class="event-card event-card--past">
+          <div class="event-card__img" style="aspect-ratio:16/9">
+            <div class="event-card__img-bg"></div>
+            <span class="event-card__badge event-card__badge--past">Pasado</span>
+            <div class="event-card__img-placeholder">
+              <div class="event-card__img-icon">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+              </div>
+              <span class="event-card__img-label">Foto / logo del evento</span>
+            </div>
+          </div>
+          <div class="event-card__body">
+            <div class="event-card__meta">
+              <span class="event-card__meta-item">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+                DD Mes AAAA
+              </span>
+              <span class="event-card__meta-item">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
+                Ciudad, País
+              </span>
+            </div>
+            <h3 class="event-card__title">Nombre del evento pendiente de contenido real</h3>
+            <p class="event-card__desc">Descripción del evento pendiente de contenido real por parte del cliente.</p>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- CTA -->
+  <section class="cta-section" id="contacto" aria-labelledby="cta-title">
+    <div class="cta-inner">
+      <h2 id="cta-title">¿Nos vemos en el próximo evento?</h2>
+      <p>Si quieres quedar con nuestro equipo en alguno de los eventos del sector, escríbenos. Estaremos encantados de charlar.</p>
+      <div class="cta-buttons">
+        <a href="#" class="btn-cta-primary">Contactar</a>
+        <a href="#" class="btn-cta-secondary">Ver todas las soluciones</a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="footer-brand__logo">
+            <div class="footer-brand__logo-mark"><span>P</span></div>
+            <span class="footer-brand__logo-text">Prosodie</span>
+          </div>
+          <p class="footer-brand__desc">Partner tecnológico estratégico para infraestructuras críticas, cloud y transformación inteligente.</p>
+        </div>
+        <div class="footer-col">
+          <p class="footer-col__title">Servicios</p>
+          <ul>
+            <li><a href="#">Infraestructuras Críticas</a></li>
+            <li><a href="#">Cloud Managed Services</a></li>
+            <li><a href="#">IA &amp; Automation</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <p class="footer-col__title">Empresa</p>
+          <ul>
+            <li><a href="#">Quiénes Somos</a></li>
+            <li><a href="#">Partners</a></li>
+            <li><a href="#">Certificaciones</a></li>
+            <li><a href="#">Trabaja con Nosotros</a></li>
+          </ul>
+        </div>
+        <div class="footer-col footer-contact">
+          <p class="footer-col__title">Contacto</p>
+          <p><strong>+34 91 150 05 05</strong></p>
+          <p>Valencia · Madrid</p>
+          <ul style="margin-top:0.75rem">
+            <li><a href="#">Formulario de contacto</a></li>
+            <li><a href="https://www.linkedin.com/company/prosodie" target="_blank" rel="noopener">LinkedIn</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2025 Prosodie. Todos los derechos reservados.</p>
+        <nav class="footer-legal" aria-label="Legal">
+          <a href="#">Privacidad</a>
+          <a href="#">Aviso legal</a>
+          <a href="#">Cookies</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      document.querySelectorAll('.has-dropdown > button').forEach(function (btn) {
+        var item = btn.closest('.has-dropdown');
+        item.addEventListener('mouseenter', function () { btn.setAttribute('aria-expanded', 'true'); });
+        item.addEventListener('mouseleave', function () { btn.setAttribute('aria-expanded', 'false'); });
+      });
+    })();
+  </script>
+
+</body>
+</html>
