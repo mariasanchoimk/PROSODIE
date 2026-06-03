@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trabaja con Nosotros – Prosodie</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-primary:    #0A2540;
+      --color-secondary:  #00A8E8;
+      --color-accent:     #F26E22;
+      --color-light:      #F4F7FB;
+      --color-white:      #FFFFFF;
+      --color-text:       #1A1A2E;
+      --color-text-muted: #5A6A80;
+      --color-border:     #D6E0EE;
+      --color-success:    #10B981;
+      --font-main: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      --radius-sm: 6px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --shadow-sm: 0 2px 8px rgba(10,37,64,0.08);
+      --shadow-md: 0 6px 24px rgba(10,37,64,0.13);
+      --shadow-dropdown: 0 12px 40px rgba(10,37,64,0.18);
+      --transition: 0.25s ease;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-main); color: var(--color-text); background: var(--color-white); line-height: 1.6; font-size: 16px; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+
+    /* HEADER */
+    .site-header { background: var(--color-primary); position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 12px rgba(0,0,0,0.2); }
+    .nav-bar { max-width: 1200px; margin: 0 auto; padding: 0 2rem; height: 70px; display: flex; align-items: center; gap: 1.5rem; }
+    .nav-logo { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; }
+    .nav-logo__mark { width: 36px; height: 36px; background: var(--color-secondary); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; }
+    .nav-logo__mark span { color: var(--color-primary); font-weight: 800; font-size: 18px; }
+    .nav-logo__text { color: var(--color-white); font-size: 1.25rem; font-weight: 700; }
+    .nav-menu { display: flex; align-items: center; gap: 0; flex: 1; }
+    .nav-menu__item { position: relative; }
+    .nav-menu__item > a, .nav-menu__item > button { color: rgba(255,255,255,0.85); font-size: 0.875rem; font-weight: 500; padding: 0.55rem 0.9rem; border-radius: var(--radius-sm); transition: var(--transition); display: flex; align-items: center; gap: 0.3rem; background: none; border: none; cursor: pointer; white-space: nowrap; font-family: var(--font-main); line-height: 1; }
+    .nav-menu__item > a:hover, .nav-menu__item > button:hover { background: rgba(255,255,255,0.1); color: var(--color-white); }
+    .nav-menu__item.active > a, .nav-menu__item.active > button { color: var(--color-secondary); }
+    .nav-arrow { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2.5; transition: transform var(--transition); flex-shrink: 0; }
+    .nav-menu__item.has-dropdown:hover .nav-arrow { transform: rotate(180deg); }
+    .nav-dropdown { position: absolute; top: calc(100% + 8px); left: 0; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-md); box-shadow: var(--shadow-dropdown); min-width: 240px; padding: 0.5rem; opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity var(--transition), transform var(--transition), visibility var(--transition); z-index: 300; }
+    .nav-menu__item.has-dropdown:hover .nav-dropdown, .nav-menu__item.has-dropdown:focus-within .nav-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+    .nav-dropdown__item a { display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 0.85rem; border-radius: var(--radius-sm); color: var(--color-text); font-size: 0.875rem; font-weight: 500; transition: var(--transition); }
+    .nav-dropdown__item a:hover { background: var(--color-light); color: var(--color-primary); }
+    .nav-dropdown__item.active a { background: rgba(0,168,232,0.08); color: var(--color-secondary); }
+    .nav-dropdown__icon { width: 32px; height: 32px; background: rgba(0,168,232,0.1); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .nav-dropdown__icon svg { width: 16px; height: 16px; stroke: var(--color-secondary); fill: none; stroke-width: 1.75; }
+    .nav-dropdown__label { line-height: 1.2; }
+    .nav-dropdown__sub { display: block; font-size: 0.75rem; color: var(--color-text-muted); font-weight: 400; margin-top: 1px; }
+    .nav-end { display: flex; align-items: center; gap: 0.75rem; margin-left: auto; flex-shrink: 0; }
+    .nav-claim { color: rgba(255,255,255,0.5); font-size: 0.78rem; font-style: italic; white-space: nowrap; }
+    .btn-lang { background: transparent; border: 1.5px solid rgba(255,255,255,0.3); color: var(--color-white); font-size: 0.78rem; font-weight: 600; padding: 0.3rem 0.75rem; border-radius: var(--radius-sm); cursor: pointer; transition: var(--transition); }
+    .btn-lang:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.6); }
+    .btn-contact-nav { background: var(--color-accent); color: var(--color-white); font-size: 0.82rem; font-weight: 700; padding: 0.5rem 1.2rem; border-radius: var(--radius-sm); border: none; cursor: pointer; transition: var(--transition); white-space: nowrap; }
+    .btn-contact-nav:hover { background: #d95c10; }
+
+    /* UTILIDADES */
+    .section-label { display: inline-block; background: rgba(0,168,232,0.1); color: var(--color-secondary); font-size: 0.72rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 0.3rem 0.8rem; border-radius: 100px; margin-bottom: 1rem; }
+    .section-title { font-size: 1.85rem; font-weight: 800; color: var(--color-primary); line-height: 1.25; margin-bottom: 1rem; }
+
+    /* BREADCRUMB */
+    .breadcrumb { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.75rem; }
+    .breadcrumb a { color: rgba(255,255,255,0.45); font-size: 0.8rem; transition: var(--transition); }
+    .breadcrumb a:hover { color: var(--color-secondary); }
+    .breadcrumb__sep { color: rgba(255,255,255,0.25); font-size: 0.75rem; }
+    .breadcrumb__current { color: rgba(255,255,255,0.7); font-size: 0.8rem; }
+
+    /* =============================================
+       HERO
+    ============================================= */
+    .page-hero { background: var(--color-primary); padding: 5rem 2rem 4.5rem; position: relative; overflow: hidden; }
+    .page-hero::before { content: ''; position: absolute; right: -80px; top: -100px; width: 550px; height: 550px; background: radial-gradient(circle, rgba(0,168,232,0.13) 0%, transparent 70%); pointer-events: none; }
+    .page-hero__inner { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .page-hero__tag { display: inline-block; background: rgba(0,168,232,0.18); color: var(--color-secondary); font-size: 0.72rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 0.3rem 0.8rem; border-radius: 100px; margin-bottom: 1.25rem; border: 1px solid rgba(0,168,232,0.3); }
+    .page-hero__title { color: var(--color-white); font-size: 2.6rem; font-weight: 800; line-height: 1.12; margin-bottom: 1.25rem; }
+    .page-hero__title em { font-style: normal; color: var(--color-secondary); }
+    .page-hero__desc { color: rgba(255,255,255,0.7); font-size: 1rem; line-height: 1.8; margin-bottom: 2rem; }
+    .btn-hero { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--color-accent); color: var(--color-white); font-size: 0.9rem; font-weight: 700; padding: 0.8rem 1.75rem; border-radius: var(--radius-sm); transition: var(--transition); }
+    .btn-hero:hover { background: #d95c10; transform: translateY(-2px); }
+    .btn-hero svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2.5; }
+
+    /* Stats hero */
+    .hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .hero-stat { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-md); padding: 1.5rem 1.25rem; text-align: center; }
+    .hero-stat__number { font-size: 2rem; font-weight: 800; color: var(--color-white); line-height: 1; margin-bottom: 0.35rem; }
+    .hero-stat__number span { color: var(--color-secondary); }
+    .hero-stat__label { font-size: 0.8rem; color: rgba(255,255,255,0.55); font-weight: 500; }
+
+    /* =============================================
+       BLOQUE 1: BENEFICIOS
+    ============================================= */
+    .benefits-section { padding: 5.5rem 2rem; background: var(--color-white); }
+    .benefits-inner { max-width: 1200px; margin: 0 auto; }
+    .benefits-header { margin-bottom: 3.5rem; }
+
+    /* Bloque de beneficios textuales */
+    .benefits-highlights { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 3.5rem; }
+
+    .benefit-highlight {
+      background: var(--color-light); border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg); padding: 2rem 1.75rem;
+      transition: var(--transition);
+    }
+    .benefit-highlight:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+    .benefit-highlight__icon { width: 48px; height: 48px; background: rgba(0,168,232,0.1); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem; }
+    .benefit-highlight__icon svg { width: 24px; height: 24px; stroke: var(--color-secondary); fill: none; stroke-width: 1.5; }
+    .benefit-highlight__title { font-size: 1rem; font-weight: 700; color: var(--color-primary); margin-bottom: 0.5rem; }
+    .benefit-highlight__desc { font-size: 0.875rem; color: var(--color-text-muted); line-height: 1.65; }
+
+    /* Lista completa de beneficios sociales */
+    .benefits-list-section { background: var(--color-primary); border-radius: var(--radius-lg); padding: 2.5rem 3rem; }
+    .benefits-list-title { color: var(--color-white); font-size: 1.1rem; font-weight: 700; margin-bottom: 1.5rem; }
+    .benefits-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem 2rem; }
+    .benefits-list__item { display: flex; align-items: center; gap: 0.65rem; color: rgba(255,255,255,0.75); font-size: 0.9rem; }
+    .benefits-list__item::before { content: ''; width: 6px; height: 6px; background: var(--color-secondary); border-radius: 50%; flex-shrink: 0; }
+
+    /* =============================================
+       FOTOS EQUIPO (placeholder)
+    ============================================= */
+    .photos-section { padding: 4rem 2rem; background: var(--color-light); overflow: hidden; }
+    .photos-inner { max-width: 1200px; margin: 0 auto; }
+    .photos-header { margin-bottom: 2rem; }
+    .photos-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+    .photo-placeholder {
+      border-radius: var(--radius-md); overflow: hidden;
+      background: var(--color-primary); aspect-ratio: 4/3;
+      position: relative;
+    }
+    .photo-placeholder:first-child { grid-column: span 2; grid-row: span 2; aspect-ratio: auto; }
+    .photo-placeholder-bg { position: absolute; inset: 0; background: repeating-linear-gradient(-45deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 14px); }
+    .photo-placeholder-label { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem; }
+    .photo-placeholder-label svg { width: 28px; height: 28px; stroke: rgba(255,255,255,0.25); fill: none; stroke-width: 1.5; }
+    .photo-placeholder-label span { color: rgba(255,255,255,0.25); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.5px; }
+
+    /* =============================================
+       BLOQUE 2: FORMULARIO DE CANDIDATURA
+    ============================================= */
+    .form-section { padding: 5.5rem 2rem; background: var(--color-white); }
+    .form-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.4fr; gap: 5rem; align-items: start; }
+
+    .form-info { }
+    .form-info__desc { color: var(--color-text-muted); font-size: 1rem; line-height: 1.8; margin-bottom: 2rem; }
+
+    /* Datos corporativos dentro del formulario */
+    .form-stats { display: flex; flex-direction: column; gap: 1rem; }
+    .form-stat { display: flex; align-items: center; gap: 1rem; background: var(--color-light); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 1.25rem 1.5rem; }
+    .form-stat__number { font-size: 1.6rem; font-weight: 800; color: var(--color-primary); white-space: nowrap; flex-shrink: 0; }
+    .form-stat__number span { color: var(--color-secondary); }
+    .form-stat__label { font-size: 0.875rem; color: var(--color-text-muted); font-weight: 500; line-height: 1.4; }
+
+    /* Formulario */
+    .candidacy-form { background: var(--color-light); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 2.5rem; }
+    .form-title { font-size: 1.25rem; font-weight: 700; color: var(--color-primary); margin-bottom: 1.75rem; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+    .form-group:last-child { margin-bottom: 0; }
+    .form-label { font-size: 0.82rem; font-weight: 600; color: var(--color-primary); }
+    .form-label .required { color: var(--color-accent); margin-left: 2px; }
+    .form-input, .form-select, .form-textarea {
+      width: 100%; padding: 0.7rem 1rem;
+      border: 1.5px solid var(--color-border); border-radius: var(--radius-sm);
+      font-size: 0.875rem; font-family: var(--font-main); color: var(--color-text);
+      background: var(--color-white); transition: var(--transition);
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--color-secondary); box-shadow: 0 0 0 3px rgba(0,168,232,0.12); }
+    .form-textarea { resize: vertical; min-height: 110px; }
+
+    /* Input file */
+    .form-file-label {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.7rem 1rem; border: 1.5px dashed var(--color-border);
+      border-radius: var(--radius-sm); cursor: pointer; transition: var(--transition);
+      background: var(--color-white); font-size: 0.875rem; color: var(--color-text-muted);
+    }
+    .form-file-label:hover { border-color: var(--color-secondary); color: var(--color-primary); }
+    .form-file-label svg { width: 18px; height: 18px; stroke: var(--color-secondary); fill: none; stroke-width: 1.75; flex-shrink: 0; }
+    .form-file-input { display: none; }
+
+    .form-note { font-size: 0.78rem; color: var(--color-text-muted); margin-top: 0.35rem; }
+
+    .btn-submit {
+      width: 100%; background: var(--color-accent); color: var(--color-white);
+      font-size: 0.9rem; font-weight: 700; padding: 0.85rem 2rem;
+      border-radius: var(--radius-sm); border: none; cursor: pointer;
+      transition: var(--transition); margin-top: 0.5rem;
+      font-family: var(--font-main);
+    }
+    .btn-submit:hover { background: #d95c10; transform: translateY(-1px); }
+
+    /* =============================================
+       BLOQUE 3: OFERTAS LINKEDIN
+    ============================================= */
+    .linkedin-section { padding: 5.5rem 2rem; background: var(--color-primary); position: relative; overflow: hidden; }
+    .linkedin-section::before { content: ''; position: absolute; right: -60px; top: -80px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(0,168,232,0.1) 0%, transparent 70%); pointer-events: none; }
+    .linkedin-inner { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+    .linkedin-header { display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: center; margin-bottom: 3rem; }
+    .linkedin-header .section-label { background: rgba(0,168,232,0.15); }
+    .linkedin-header .section-title { color: var(--color-white); margin-bottom: 0.5rem; }
+    .linkedin-header p { color: rgba(255,255,255,0.6); font-size: 0.95rem; }
+
+    .btn-linkedin {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      background: #0A66C2; color: var(--color-white);
+      font-size: 0.875rem; font-weight: 700;
+      padding: 0.75rem 1.5rem; border-radius: var(--radius-sm);
+      transition: var(--transition); flex-shrink: 0;
+    }
+    .btn-linkedin:hover { background: #084fa0; transform: translateY(-2px); }
+    .btn-linkedin svg { width: 18px; height: 18px; fill: currentColor; }
+
+    /* Placeholder ofertas LinkedIn */
+    .linkedin-plugin-placeholder {
+      background: rgba(255,255,255,0.05);
+      border: 1.5px dashed rgba(255,255,255,0.2);
+      border-radius: var(--radius-lg);
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+    .linkedin-plugin-placeholder__icon { width: 64px; height: 64px; background: rgba(10,102,194,0.25); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; }
+    .linkedin-plugin-placeholder__icon svg { width: 32px; height: 32px; fill: #0A66C2; }
+    .linkedin-plugin-placeholder h3 { color: var(--color-white); font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .linkedin-plugin-placeholder p { color: rgba(255,255,255,0.5); font-size: 0.9rem; line-height: 1.7; max-width: 480px; margin: 0 auto 1.75rem; }
+
+    /* =============================================
+       BLOQUE 4: CONSEJOS PARA EL CV
+    ============================================= */
+    .tips-section { padding: 5.5rem 2rem; background: var(--color-light); }
+    .tips-inner { max-width: 1200px; margin: 0 auto; }
+    .tips-header { margin-bottom: 3.5rem; max-width: 640px; }
+
+    .tips-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+
+    .tip-card {
+      background: var(--color-white); border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg); padding: 2rem 1.75rem;
+      transition: var(--transition); display: flex; flex-direction: column;
+    }
+    .tip-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+
+    .tip-card__icon { width: 52px; height: 52px; background: rgba(0,168,232,0.1); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem; }
+    .tip-card__icon svg { width: 26px; height: 26px; stroke: var(--color-secondary); fill: none; stroke-width: 1.5; }
+
+    .tip-card__title { font-size: 1.05rem; font-weight: 700; color: var(--color-primary); margin-bottom: 1rem; }
+
+    .tip-card__list { display: flex; flex-direction: column; gap: 0.65rem; flex: 1; }
+    .tip-card__list-item { display: flex; align-items: flex-start; gap: 0.65rem; font-size: 0.875rem; color: var(--color-text-muted); line-height: 1.55; }
+    .tip-card__list-item::before { content: ''; width: 5px; height: 5px; background: var(--color-secondary); border-radius: 50%; flex-shrink: 0; margin-top: 0.45rem; }
+
+    /* =============================================
+       CTA FINAL
+    ============================================= */
+    .cta-section { padding: 5rem 2rem; background: var(--color-primary); text-align: center; }
+    .cta-inner { max-width: 640px; margin: 0 auto; }
+    .cta-section h2 { font-size: 1.9rem; font-weight: 800; color: var(--color-white); margin-bottom: 1rem; }
+    .cta-section p { color: rgba(255,255,255,0.65); font-size: 1rem; margin-bottom: 2rem; }
+    .cta-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-cta-primary { background: var(--color-accent); color: var(--color-white); font-size: 0.9rem; font-weight: 700; padding: 0.85rem 2rem; border-radius: var(--radius-sm); transition: var(--transition); }
+    .btn-cta-primary:hover { background: #d95c10; transform: translateY(-2px); }
+    .btn-cta-secondary { background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.25); color: var(--color-white); font-size: 0.9rem; font-weight: 700; padding: 0.85rem 2rem; border-radius: var(--radius-sm); transition: var(--transition); }
+    .btn-cta-secondary:hover { background: rgba(255,255,255,0.18); }
+
+    /* FOOTER */
+    .site-footer { background: var(--color-primary); padding: 3.5rem 2rem 1.5rem; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; }
+    .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 3rem; padding-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 1.5rem; }
+    .footer-brand__logo { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; }
+    .footer-brand__logo-mark { width: 32px; height: 32px; background: var(--color-secondary); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; }
+    .footer-brand__logo-mark span { color: var(--color-primary); font-weight: 800; font-size: 16px; }
+    .footer-brand__logo-text { color: var(--color-white); font-size: 1.1rem; font-weight: 700; }
+    .footer-brand__desc { color: rgba(255,255,255,0.5); font-size: 0.85rem; line-height: 1.7; }
+    .footer-col__title { color: var(--color-white); font-size: 0.8rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 1.2rem; }
+    .footer-col ul { display: flex; flex-direction: column; gap: 0.6rem; }
+    .footer-col ul li a { color: rgba(255,255,255,0.5); font-size: 0.875rem; transition: var(--transition); }
+    .footer-col ul li a:hover { color: var(--color-secondary); }
+    .footer-contact p { color: rgba(255,255,255,0.5); font-size: 0.875rem; margin-bottom: 0.5rem; }
+    .footer-contact strong { color: rgba(255,255,255,0.8); }
+    .footer-bottom { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .footer-copy { color: rgba(255,255,255,0.35); font-size: 0.8rem; }
+    .footer-legal { display: flex; gap: 1.25rem; }
+    .footer-legal a { color: rgba(255,255,255,0.35); font-size: 0.8rem; transition: var(--transition); }
+    .footer-legal a:hover { color: var(--color-secondary); }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      .benefits-highlights { grid-template-columns: repeat(2, 1fr); }
+      .benefits-list { grid-template-columns: repeat(2, 1fr); }
+      .photos-grid { grid-template-columns: repeat(3, 1fr); }
+      .photo-placeholder:first-child { grid-column: span 2; }
+    }
+    @media (max-width: 900px) {
+      .page-hero__inner { grid-template-columns: 1fr; gap: 2.5rem; }
+      .form-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .linkedin-header { grid-template-columns: 1fr; }
+      .nav-claim { display: none; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    }
+    @media (max-width: 768px) {
+      .nav-menu { display: none; }
+      .page-hero__title { font-size: 2rem; }
+      .benefits-highlights { grid-template-columns: 1fr; }
+      .benefits-list { grid-template-columns: 1fr; }
+      .photos-grid { grid-template-columns: repeat(2, 1fr); }
+      .photo-placeholder:first-child { grid-column: span 2; }
+      .tips-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .footer-bottom { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <nav class="nav-bar" aria-label="Navegación principal">
+      <a href="index.html" class="nav-logo" aria-label="Prosodie – Inicio">
+        <div class="nav-logo__mark"><span>P</span></div>
+        <span class="nav-logo__text">Prosodie</span>
+      </a>
+      <ul class="nav-menu" role="list">
+        <li class="nav-menu__item"><a href="index.html">Inicio</a></li>
+        <li class="nav-menu__item has-dropdown">
+          <button aria-haspopup="true" aria-expanded="false">Soluciones<svg class="nav-arrow" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></button>
+          <ul class="nav-dropdown" role="menu">
+            <li class="nav-dropdown__item" role="none"><a href="infraestructuras.html" role="menuitem"><div class="nav-dropdown__icon"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v18M19 3v18M3 9h4M17 9h4M3 15h4M17 15h4M9 3h6v18H9z"/></svg></div><span class="nav-dropdown__label">Gestión de Infraestructuras Críticas<span class="nav-dropdown__sub">Alta disponibilidad y resiliencia</span></span></a></li>
+            <li class="nav-dropdown__item" role="none"><a href="cloud.html" role="menuitem"><div class="nav-dropdown__icon"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15a4.5 4.5 0 004.5 4.5H18a3.75 3.75 0 001.332-7.257 3 3 0 00-3.758-3.848 5.25 5.25 0 00-10.233 2.33A4.502 4.502 0 002.25 15z"/></svg></div><span class="nav-dropdown__label">Cloud Managed Services<span class="nav-dropdown__sub">Gestión integral cloud</span></span></a></li>
+            <li class="nav-dropdown__item" role="none"><a href="ia-automation.html" role="menuitem"><div class="nav-dropdown__icon"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></div><span class="nav-dropdown__label">IA &amp; Automation<span class="nav-dropdown__sub">Automatización inteligente</span></span></a></li>
+          </ul>
+        </li>
+        <li class="nav-menu__item has-dropdown">
+          <button aria-haspopup="true" aria-expanded="false">Recursos<svg class="nav-arrow" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></button>
+          <ul class="nav-dropdown" role="menu">
+            <li class="nav-dropdown__item" role="none"><a href="voces.html" role="menuitem"><div class="nav-dropdown__icon"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z"/></svg></div><span class="nav-dropdown__label">Voces de Prosodie</span></a></li>
+            <li class="nav-dropdown__item" role="none"><a href="#" role="menuitem"><div class="nav-dropdown__icon"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25z"/></svg></div><span class="nav-dropdown__label">Casos de Uso</span></a></li>
+            <li class="nav-dropdown__item" role="none"><a href="eventos.html" role="menuitem"><div class="nav-dropdown__icon"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg></div><span class="nav-dropdown__label">Eventos</span></a></li>
+          </ul>
+        </li>
+        <li class="nav-menu__item has-dropdown">
+          <button aria-haspopup="true" aria-expanded="false">Acerca de<svg class="nav-arrow" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></button>
+          <ul class="nav-dropdown" role="menu">
+            <li class="nav-dropdown__item" role="none"><a href="quienes-somos.html" role="menuitem"><div class="nav-dropdown__icon"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div><span class="nav-dropdown__label">Quiénes somos</span></a></li>
+            <li class="nav-dropdown__item" role="none"><a href="#" role="menuitem"><div class="nav-dropdown__icon"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z"/></svg></div><span class="nav-dropdown__label">Partners</span></a></li>
+            <li class="nav-dropdown__item" role="none"><a href="#" role="menuitem"><div class="nav-dropdown__icon"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"/></svg></div><span class="nav-dropdown__label">Certificaciones</span></a></li>
+          </ul>
+        </li>
+        <li class="nav-menu__item active"><a href="trabaja.html">Trabaja con Nosotros</a></li>
+      </ul>
+      <div class="nav-end">
+        <span class="nav-claim">Tu partner tecnológico estratégico</span>
+        <button class="btn-lang" aria-label="Cambiar idioma">ES / EN</button>
+        <a href="#formulario" class="btn-contact-nav">Enviar candidatura</a>
+      </div>
+    </nav>
+  </header>
+
+
+  <!-- HERO -->
+  <section class="page-hero" aria-labelledby="page-title">
+    <div class="page-hero__inner">
+      <div>
+        <nav class="breadcrumb" aria-label="Ruta de navegación">
+          <a href="index.html">Inicio</a>
+          <span class="breadcrumb__sep">›</span>
+          <span class="breadcrumb__current">Trabaja con Nosotros</span>
+        </nav>
+        <span class="page-hero__tag">Únete al equipo</span>
+        <h1 class="page-hero__title" id="page-title">Trabaja con <em>Nosotros</em></h1>
+        <!-- NOTA: Descripción pendiente de confirmar por el cliente -->
+        <p class="page-hero__desc">En Prosodie buscamos personas que quieran crecer en un entorno técnico de alto nivel, con proyectos críticos reales y un equipo que apuesta por las personas.</p>
+        <a href="#formulario" class="btn-hero">
+          Enviar mi candidatura
+          <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat__number"><span>+</span>25</div>
+          <div class="hero-stat__label">Años de experiencia</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat__number">2</div>
+          <div class="hero-stat__label">Oficinas en España</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat__number"><span>+</span>200</div>
+          <div class="hero-stat__label">Trabajadores</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat__number">3<span>/5</span></div>
+          <div class="hero-stat__label">Estudiantes en prácticas que se incorporan</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =============================================
+       BLOQUE 1: BENEFICIOS QUE OFRECEMOS EN PROSODIE
+  ============================================= -->
+  <section class="benefits-section" aria-labelledby="benefits-title">
+    <div class="benefits-inner">
+
+      <div class="benefits-header">
+        <span class="section-label">Por qué elegirnos</span>
+        <h2 class="section-title" id="benefits-title">Beneficios que ofrecemos en Prosodie</h2>
+      </div>
+
+      <!-- Beneficios destacados -->
+      <div class="benefits-highlights">
+
+        <div class="benefit-highlight">
+          <div class="benefit-highlight__icon">
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941"/></svg>
+          </div>
+          <h3 class="benefit-highlight__title">Crecimiento profesional</h3>
+          <p class="benefit-highlight__desc">Planes de carrera, evaluaciones periódicas y oportunidades reales de promoción interna.</p>
+        </div>
+
+        <div class="benefit-highlight">
+          <div class="benefit-highlight__icon">
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          </div>
+          <h3 class="benefit-highlight__title">Onboarding y acompañamiento</h3>
+          <p class="benefit-highlight__desc">Onboarding estructurado y acompañamiento de manager desde el primer día.</p>
+        </div>
+
+        <div class="benefit-highlight">
+          <div class="benefit-highlight__icon">
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418"/></svg>
+          </div>
+          <h3 class="benefit-highlight__title">Cultura de equipo</h3>
+          <p class="benefit-highlight__desc">Eventos de teambuilding, y afterworks deportivos y de ocio.</p>
+        </div>
+
+      </div>
+
+      <!-- Lista completa de beneficios sociales -->
+      <div class="benefits-list-section">
+        <p class="benefits-list-title">Beneficios sociales</p>
+        <ul class="benefits-list" role="list">
+          <li class="benefits-list__item">Tickets restaurante añadidos a la nómina</li>
+          <li class="benefits-list__item">Seguro médico y seguro de vida</li>
+          <li class="benefits-list__item">Teletrabajo</li>
+          <li class="benefits-list__item">24 días de vacaciones + 24 y 31 de diciembre y día libre en tu cumpleaños</li>
+          <li class="benefits-list__item">Formación continua a cargo de la empresa</li>
+          <li class="benefits-list__item">Flexibilidad horaria</li>
+          <li class="benefits-list__item">Jornada intensiva</li>
+          <li class="benefits-list__item">Descuentos comerciales por ser parte de Prosodie</li>
+          <li class="benefits-list__item">Plan de Bienestar (actividades deportivas, Seguro Médico, Seguro de Vida)</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- FOTOS DE EQUIPO Y EVENTOS -->
+  <!-- NOTA: Fotos reales de eventos y equipos pendientes de proporcionar por el cliente -->
+  <section class="photos-section" aria-label="Fotos del equipo y eventos">
+    <div class="photos-inner">
+      <div class="photos-header">
+        <span class="section-label">Nuestro equipo</span>
+        <h2 class="section-title">Fotos de los diferentes eventos y equipos</h2>
+      </div>
+      <div class="photos-grid">
+        <div class="photo-placeholder">
+          <div class="photo-placeholder-bg"></div>
+          <div class="photo-placeholder-label">
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
+            <span>Foto evento / equipo</span>
+          </div>
+        </div>
+        <div class="photo-placeholder">
+          <div class="photo-placeholder-bg"></div>
+          <div class="photo-placeholder-label">
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
+            <span>Foto evento / equipo</span>
+          </div>
+        </div>
+        <div class="photo-placeholder">
+          <div class="photo-placeholder-bg"></div>
+          <div class="photo-placeholder-label">
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
+            <span>Foto evento / equipo</span>
+          </div>
+        </div>
+        <div class="photo-placeholder">
+          <div class="photo-placeholder-bg"></div>
+          <div class="photo-placeholder-label">
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
+            <span>Foto evento / equipo</span>
+          </div>
+        </div>
+        <div class="photo-placeholder">
+          <div class="photo-placeholder-bg"></div>
+          <div class="photo-placeholder-label">
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
+            <span>Foto evento / equipo</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =============================================
+       BLOQUE 2: FORMULARIO DE CANDIDATURA
+  ============================================= -->
+  <section class="form-section" id="formulario" aria-labelledby="form-title">
+    <div class="form-inner">
+
+      <!-- Info lateral -->
+      <div class="form-info">
+        <span class="section-label">Únete a nuestro equipo</span>
+        <h2 class="section-title" id="form-title">Trabaja con nosotros</h2>
+        <p class="form-info__desc">¿Te interesa formar parte de Prosodie? Envíanos tu candidatura y nuestro equipo de People se pondrá en contacto contigo.</p>
+
+        <div class="form-stats">
+          <div class="form-stat">
+            <div class="form-stat__number"><span>+</span>25</div>
+            <div class="form-stat__label">Años de experiencia</div>
+          </div>
+          <div class="form-stat">
+            <div class="form-stat__number">2</div>
+            <div class="form-stat__label">Oficinas en España</div>
+          </div>
+          <div class="form-stat">
+            <div class="form-stat__number"><span>+</span>200</div>
+            <div class="form-stat__label">Trabajadores</div>
+          </div>
+          <div class="form-stat">
+            <div class="form-stat__number">3<span>/5</span></div>
+            <div class="form-stat__label">De cada 5 estudiantes se incorporan con nosotros tras las prácticas</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formulario -->
+      <div class="candidacy-form" role="form" aria-label="Formulario de candidatura">
+        <p class="form-title">Envía tu candidatura</p>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="nombre">Nombre y Apellidos <span class="required" aria-hidden="true">*</span></label>
+            <input class="form-input" type="text" id="nombre" name="nombre" placeholder="Tu nombre completo" required autocomplete="name" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="email">Correo Electrónico <span class="required" aria-hidden="true">*</span></label>
+            <input class="form-input" type="email" id="email" name="email" placeholder="tu@email.com" required autocomplete="email" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="telefono">Teléfono Móvil <span class="required" aria-hidden="true">*</span></label>
+            <input class="form-input" type="tel" id="telefono" name="telefono" placeholder="+34 600 000 000" required autocomplete="tel" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="area">Área de interés</label>
+            <!-- NOTA: Opciones de área de interés pendientes de confirmar por el cliente -->
+            <select class="form-select" id="area" name="area">
+              <option value="" disabled selected>Selecciona un área</option>
+              <option value="infraestructuras">Gestión de Infraestructuras</option>
+              <option value="cloud">Cloud Managed Services</option>
+              <option value="ia">IA &amp; Automation</option>
+              <option value="desarrollo">Desarrollo de Software</option>
+              <option value="seguridad">Ciberseguridad</option>
+              <option value="rrhh">Recursos Humanos</option>
+              <option value="comercial">Comercial / Marketing</option>
+              <option value="otro">Otro</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="cv">Añadir CV (archivo)</label>
+          <label class="form-file-label" for="cv">
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13"/></svg>
+            <span id="cv-label-text">Adjunta tu CV (PDF, DOC, DOCX — máx. 5 MB)</span>
+          </label>
+          <input class="form-file-input" type="file" id="cv" name="cv" accept=".pdf,.doc,.docx" aria-describedby="cv-note" />
+          <span class="form-note" id="cv-note">Formatos aceptados: PDF, DOC, DOCX. Tamaño máximo: 5 MB.</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="mensaje">Mensaje / Comentarios</label>
+          <textarea class="form-textarea" id="mensaje" name="mensaje" placeholder="Cuéntanos algo sobre ti, tus motivaciones o cualquier información que quieras añadir..."></textarea>
+        </div>
+
+        <button type="button" class="btn-submit">Enviar candidatura</button>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =============================================
+       BLOQUE 3: OFERTAS DISPONIBLES EN LINKEDIN
+  ============================================= -->
+  <section class="linkedin-section" id="ofertas" aria-labelledby="linkedin-title">
+    <div class="linkedin-inner">
+      <div class="linkedin-header">
+        <div>
+          <span class="section-label">Ofertas activas</span>
+          <h2 class="section-title" id="linkedin-title">Ofertas disponibles en LinkedIn</h2>
+          <p>Consulta nuestras vacantes activas directamente desde LinkedIn Jobs.</p>
+        </div>
+        <a href="https://www.linkedin.com/company/prosodie/jobs/" target="_blank" rel="noopener" class="btn-linkedin">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          Ver ofertas en LinkedIn
+        </a>
+      </div>
+
+      <!-- NOTA: Aquí se integrará el plug-in o widget de LinkedIn Jobs -->
+      <div class="linkedin-plugin-placeholder" role="region" aria-label="Widget de ofertas de LinkedIn">
+        <div class="linkedin-plugin-placeholder__icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </div>
+        <h3>Integración con LinkedIn Jobs</h3>
+        <p>En este espacio se integrará el widget o plug-in de LinkedIn Jobs para mostrar las vacantes activas de Prosodie en tiempo real. Requiere configuración técnica con la cuenta de LinkedIn de la empresa.</p>
+        <a href="https://www.linkedin.com/company/prosodie/jobs/" target="_blank" rel="noopener" class="btn-linkedin">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          Ver todas las ofertas en LinkedIn
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =============================================
+       BLOQUE 4: CONSEJOS PARA UN CV MÁS ATRACTIVO
+  ============================================= -->
+  <section class="tips-section" aria-labelledby="tips-title">
+    <div class="tips-inner">
+
+      <div class="tips-header">
+        <span class="section-label">Consejos para candidatos</span>
+        <h2 class="section-title" id="tips-title">Consejos para un CV más atractivo</h2>
+      </div>
+
+      <div class="tips-grid">
+
+        <!-- Consejo 1: Adapta tu CV -->
+        <article class="tip-card">
+          <div class="tip-card__icon">
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"/></svg>
+          </div>
+          <h3 class="tip-card__title">Adapta tu CV a la vacante</h3>
+          <ul class="tip-card__list" role="list">
+            <li class="tip-card__list-item">Personaliza cada versión según la oferta en base a tu perfil.</li>
+            <li class="tip-card__list-item">Redacta tu experiencia en orden cronológico inverso.</li>
+            <li class="tip-card__list-item">Resalta proyectos, tecnologías y metodologías que coincidan con lo que busca la empresa.</li>
+          </ul>
+        </article>
+
+        <!-- Consejo 2: Certificaciones -->
+        <article class="tip-card">
+          <div class="tip-card__icon">
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"/></svg>
+          </div>
+          <h3 class="tip-card__title">Resalta tus certificaciones</h3>
+          <ul class="tip-card__list" role="list">
+            <li class="tip-card__list-item">Incluye todas las certificaciones relevantes que tengas.</li>
+            <li class="tip-card__list-item">Usa palabras clave para indicar tus conocimientos técnicos.</li>
+            <li class="tip-card__list-item">Coloca la sección en un lugar visible de tu CV y de manera clara.</li>
+          </ul>
+        </article>
+
+        <!-- Consejo 3: Presentación -->
+        <article class="tip-card">
+          <div class="tip-card__icon">
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25z"/></svg>
+          </div>
+          <h3 class="tip-card__title">Cuida la presentación</h3>
+          <ul class="tip-card__list" role="list">
+            <li class="tip-card__list-item">Usa un diseño limpio, profesional y fácil de leer.</li>
+            <li class="tip-card__list-item">Incluye tus datos de contacto actualizados (email, tlf, LinkedIn).</li>
+            <li class="tip-card__list-item">Añade un breve resumen al inicio destacando tu experiencia, fortaleza y valor que aportas.</li>
+            <li class="tip-card__list-item">Extensión ideal: máx. 2 páginas.</li>
+          </ul>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- CTA -->
+  <section class="cta-section" id="contacto" aria-labelledby="cta-title">
+    <div class="cta-inner">
+      <h2 id="cta-title">¿Hablamos?</h2>
+      <p>Cuéntanos tu reto. Nuestro equipo te propondrá el camino más adecuado.</p>
+      <div class="cta-buttons">
+        <a href="#formulario" class="btn-cta-primary">Enviar candidatura</a>
+        <a href="https://www.linkedin.com/company/prosodie/jobs/" target="_blank" rel="noopener" class="btn-cta-secondary">Ver ofertas en LinkedIn</a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="footer-brand__logo">
+            <div class="footer-brand__logo-mark"><span>P</span></div>
+            <span class="footer-brand__logo-text">Prosodie</span>
+          </div>
+          <p class="footer-brand__desc">Partner tecnológico estratégico para infraestructuras críticas, cloud y transformación inteligente.</p>
+        </div>
+        <div class="footer-col">
+          <p class="footer-col__title">Servicios</p>
+          <ul>
+            <li><a href="#">Infraestructuras Críticas</a></li>
+            <li><a href="#">Cloud Managed Services</a></li>
+            <li><a href="#">IA &amp; Automation</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <p class="footer-col__title">Empresa</p>
+          <ul>
+            <li><a href="#">Quiénes Somos</a></li>
+            <li><a href="#">Partners</a></li>
+            <li><a href="#">Certificaciones</a></li>
+            <li><a href="#">Trabaja con Nosotros</a></li>
+          </ul>
+        </div>
+        <div class="footer-col footer-contact">
+          <p class="footer-col__title">Contacto</p>
+          <p><strong>+34 91 150 05 05</strong></p>
+          <p>Valencia · Madrid</p>
+          <ul style="margin-top:0.75rem">
+            <li><a href="#">Formulario de contacto</a></li>
+            <li><a href="https://www.linkedin.com/company/prosodie" target="_blank" rel="noopener">LinkedIn</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2025 Prosodie. Todos los derechos reservados.</p>
+        <nav class="footer-legal" aria-label="Legal">
+          <a href="#">Privacidad</a>
+          <a href="#">Aviso legal</a>
+          <a href="#">Cookies</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      /* Dropdown menú */
+      document.querySelectorAll('.has-dropdown > button').forEach(function (btn) {
+        var item = btn.closest('.has-dropdown');
+        item.addEventListener('mouseenter', function () { btn.setAttribute('aria-expanded', 'true'); });
+        item.addEventListener('mouseleave', function () { btn.setAttribute('aria-expanded', 'false'); });
+      });
+
+      /* File input: mostrar nombre del archivo seleccionado */
+      var cvInput = document.getElementById('cv');
+      var cvLabelText = document.getElementById('cv-label-text');
+      if (cvInput && cvLabelText) {
+        cvInput.addEventListener('change', function () {
+          if (cvInput.files && cvInput.files[0]) {
+            cvLabelText.textContent = cvInput.files[0].name;
+          } else {
+            cvLabelText.textContent = 'Adjunta tu CV (PDF, DOC, DOCX — máx. 5 MB)';
+          }
+        });
+      }
+    })();
+  </script>
+
+</body>
+</html>
